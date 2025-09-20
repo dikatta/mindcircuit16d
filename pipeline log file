@@ -1,0 +1,6 @@
+This stage deploys .war to tomcat webserver
+[DeployPublisher][INFO] Attempting to deploy 1 war file(s)
+[DeployPublisher][INFO] Deploying /var/lib/jenkins/workspace/CICD2/target/mindcircuitbatch16d-1.1.0.war to container Tomcat 9.x Remote with context linkedin
+  Redeploying [/var/lib/jenkins/workspace/CICD2/target/mindcircuitbatch16d-1.1.0.war]
+  Undeploying [/var/lib/jenkins/workspace/CICD2/target/mindcircuitbatch16d-1.1.0.war]
+  Deploying [/var/lib/jenkins/workspace/CICD2/target/mindcircuitbatch16d-1.1.0.war]
