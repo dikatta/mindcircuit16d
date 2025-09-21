@@ -1,2489 +1,1050 @@
 
-<!DOCTYPE html>
+ <!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1"/>
+        <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+        <meta http-equiv="cache-control" content="no-cache,no-store"/>
+        <meta http-equiv="pragma" content="no-cache"/>
+        <meta http-equiv="expires" content="-1"/>
+        <meta name='mswebdialog-title' content='Connecting to gas.mcd.com'/>
+
+        <title>Sign In</title>
+        <script type='text/javascript'>
+//<![CDATA[
+function LoginErrors(){this.userNameFormatError = 'Enter your user ID in the format \u0026quot;domain\\user\u0026quot; or \u0026quot;user@domain\u0026quot;.'; this.passwordEmpty = 'Enter your password.'; this.passwordTooLong = 'Password is too long (\u0026gt; 128 characters).';}; var maxPasswordLength = 128;
+//]]>
+</script>
+
+<script type='text/javascript'>
+//<![CDATA[
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+function InputUtil(errTextElementID, errDisplayElementID) {
+
+    if (!errTextElementID)  errTextElementID = 'errorText'; 
+    if (!errDisplayElementID)  errDisplayElementID = 'error'; 
+
+    this.hasFocus = false;
+    this.errLabel = document.getElementById(errTextElementID);
+    this.errDisplay = document.getElementById(errDisplayElementID);
+};
+InputUtil.prototype.canDisplayError = function () {
+    return this.errLabel && this.errDisplay;
+}
+InputUtil.prototype.checkError = function () {
+    if (!this.canDisplayError){
+        throw new Error ('Error element not present');
+    }
+    if (this.errLabel && this.errLabel.innerHTML) {
+        this.errDisplay.style.display = '';        
+        var cause = this.errLabel.getAttribute('for');
+        if (cause) {
+            var causeNode = document.getElementById(cause);
+            if (causeNode && causeNode.value) {
+                causeNode.focus();
+                this.hasFocus = true;
+            }
+        }
+    }
+    else {
+        this.errDisplay.style.display = 'none';
+    }
+};
+InputUtil.prototype.setInitialFocus = function (input) {
+    if (this.hasFocus) return;
+    var node = document.getElementById(input);
+    if (node) {
+        if ((/^\s*$/).test(node.value)) {
+            node.focus();
+            this.hasFocus = true;
+        }
+    }
+};
+InputUtil.prototype.setError = function (input, errorMsg) {
+    if (!this.canDisplayError) {
+        throw new Error('Error element not present');
+    }
+    input.focus();
+
+    if (errorMsg) {
+        this.errLabel.innerHTML = errorMsg;
+    }
+    this.errLabel.setAttribute('for', input.id);
+    this.errDisplay.style.display = '';
+};
+InputUtil.makePlaceholder = function (input) {
+    var ua = navigator.userAgent;
+
+    if (ua != null && 
+        (ua.match(/MSIE 9.0/) != null || 
+         ua.match(/MSIE 8.0/) != null ||
+         ua.match(/MSIE 7.0/) != null)) {
+        var node = document.getElementById(input);
+        if (node) {
+            var placeholder = node.getAttribute("placeholder");
+            if (placeholder != null && placeholder != '') {
+                var label = document.createElement('input');
+                label.type = "text";
+                label.value = placeholder;
+                label.readOnly = true;
+                label.style.position = 'absolute';
+                label.style.borderColor = 'transparent';
+                label.className = node.className + ' hint';
+                label.tabIndex = -1;
+                label.onfocus = function () { this.nextSibling.focus(); };
+
+                node.style.position = 'relative';
+                node.parentNode.style.position = 'relative';
+                node.parentNode.insertBefore(label, node);
+                node.onkeyup = function () { InputUtil.showHint(this); };
+                node.onblur = function () { InputUtil.showHint(this); };
+                node.style.background = 'transparent';
+
+                node.setAttribute("placeholder", "");
+                InputUtil.showHint(node);
+            }
+        }
+    }
+};
+InputUtil.focus = function (inputField) {
+    var node = document.getElementById(inputField);
+    if (node) node.focus();
+};
+InputUtil.hasClass = function(node, clsName) {
+    return node.className.match(new RegExp('(\\s|^)' + clsName + '(\\s|$)'));
+};
+InputUtil.addClass = function(node, clsName) {
+    if (!this.hasClass(node, clsName)) node.className += " " + clsName;
+};
+InputUtil.removeClass = function(node, clsName) {
+    if (this.hasClass(node, clsName)) {
+        var reg = new RegExp('(\\s|^)' + clsName + '(\\s|$)');
+        node.className = node.className.replace(reg, ' ');
+    }
+};
+InputUtil.showHint = function (node, gotFocus) {
+    if (node.value && node.value != '') {
+        node.previousSibling.style.display = 'none';
+    }
+    else {
+        node.previousSibling.style.display = '';
+    }
+};
+InputUtil.updatePlaceholder = function (input, placeholderText) {
+    var node = document.getElementById(input);
+    if (node) {
+        var ua = navigator.userAgent;
+        if (ua != null &&
+            (ua.match(/MSIE 9.0/) != null ||
+            ua.match(/MSIE 8.0/) != null ||
+            ua.match(/MSIE 7.0/) != null)) {
+            var label = node.previousSibling;
+            if (label != null) {
+                label.value = placeholderText;
+            }
+        }
+        else {
+            node.placeholder = placeholderText;
+        }
+    }
+};
+
+//]]>
+</script>
 
 
-    
-    
-    
-    
-    
-    
-    
-    
+        
+        <link rel="stylesheet" type="text/css" href="/adfs/portal/css/style.css?id=8438FB2CAD5B4395BA32DBA9FC33187DD103D5FDC7CD924995AFA8082D7EBCCD" /><style>.illustrationClass {background-image:url(/adfs/portal/illustration/illustration.png?id=183128A3C941EDE3D9199FA37D6AA90E0A7DFE101B37D10B4FEDA0CF35E11AFD);}</style>
 
     
-    
-    
-    
+                              <script>!function(e){var n="https://s.go-mpulse.net/boomerang/";if("False"=="True")e.BOOMR_config=e.BOOMR_config||{},e.BOOMR_config.PageParams=e.BOOMR_config.PageParams||{},e.BOOMR_config.PageParams.pci=!0,n="https://s2.go-mpulse.net/boomerang/";if(window.BOOMR_API_key="RBYP4-FFFYH-N8TK5-ZKQDL-H26Z5",function(){function e(){if(!o){var e=document.createElement("script");e.id="boomr-scr-as",e.src=window.BOOMR.url,e.async=!0,i.parentNode.appendChild(e),o=!0}}function t(e){o=!0;var n,t,a,r,d=document,O=window;if(window.BOOMR.snippetMethod=e?"if":"i",t=function(e,n){var t=d.createElement("script");t.id=n||"boomr-if-as",t.src=window.BOOMR.url,BOOMR_lstart=(new Date).getTime(),e=e||d.body,e.appendChild(t)},!window.addEventListener&&window.attachEvent&&navigator.userAgent.match(/MSIE [67]\./))return window.BOOMR.snippetMethod="s",void t(i.parentNode,"boomr-async");a=document.createElement("IFRAME"),a.src="about:blank",a.title="",a.role="presentation",a.loading="eager",r=(a.frameElement||a).style,r.width=0,r.height=0,r.border=0,r.display="none",i.parentNode.appendChild(a);try{O=a.contentWindow,d=O.document.open()}catch(_){n=document.domain,a.src="javascript:var d=document.open();d.domain='"+n+"';void(0);",O=a.contentWindow,d=O.document.open()}if(n)d._boomrl=function(){this.domain=n,t()},d.write("<bo"+"dy onload='document._boomrl();'>");else if(O._boomrl=function(){t()},O.addEventListener)O.addEventListener("load",O._boomrl,!1);else if(O.attachEvent)O.attachEvent("onload",O._boomrl);d.close()}function a(e){window.BOOMR_onload=e&&e.timeStamp||(new Date).getTime()}if(!window.BOOMR||!window.BOOMR.version&&!window.BOOMR.snippetExecuted){window.BOOMR=window.BOOMR||{},window.BOOMR.snippetStart=(new Date).getTime(),window.BOOMR.snippetExecuted=!0,window.BOOMR.snippetVersion=12,window.BOOMR.url=n+"RBYP4-FFFYH-N8TK5-ZKQDL-H26Z5";var i=document.currentScript||document.getElementsByTagName("script")[0],o=!1,r=document.createElement("link");if(r.relList&&"function"==typeof r.relList.supports&&r.relList.supports("preload")&&"as"in r)window.BOOMR.snippetMethod="p",r.href=window.BOOMR.url,r.rel="preload",r.as="script",r.addEventListener("load",e),r.addEventListener("error",function(){t(!0)}),setTimeout(function(){if(!o)t(!0)},3e3),BOOMR_lstart=(new Date).getTime(),i.parentNode.appendChild(r);else t(!1);if(window.addEventListener)window.addEventListener("load",a,!1);else if(window.attachEvent)window.attachEvent("onload",a)}}(),"".length>0)if(e&&"performance"in e&&e.performance&&"function"==typeof e.performance.setResourceTimingBufferSize)e.performance.setResourceTimingBufferSize();!function(){if(BOOMR=e.BOOMR||{},BOOMR.plugins=BOOMR.plugins||{},!BOOMR.plugins.AK){var n=""=="true"?1:0,t="",a="rdrpyyqxzlsy42gp7qjq-f-b18eb433a-clientnsv4-s.akamaihd.net",i="false"=="true"?2:1,o={"ak.v":"39","ak.cp":"1657738","ak.ai":parseInt("1068453",10),"ak.ol":"0","ak.cr":0,"ak.ipv":4,"ak.proto":"http/1.1","ak.rid":"3a9fee99","ak.r":48422,"ak.a2":n,"ak.m":"dsca","ak.n":"essl","ak.bpcip":"117.213.145.0","ak.cport":36159,"ak.gh":"23.35.149.78","ak.quicv":"","ak.tlsv":"tls1.3","ak.0rtt":"","ak.0rtt.ed":"","ak.csrc":"-","ak.acc":"bbr","ak.t":"1758460947","ak.ak":"hOBiQwZUYzCg5VSAfCLimQ==rpYlDBx18nstuREcuemV3f2ViqHKQwbIW2IyguFsjNCuKbCyoKvcGhkldye3Klu5u7GH3DowI/h7NO4ZvxMda1vOy+eu/qWh0OxZedtcpVbnPqOuxnTPTZa4GCT9wHVAGePFsCJ/NHU57STYKTE+0w+GuGDqnkXH60lFATMR0ixif3fcxKGkWOBVeHLUhbzH5dyU1NiOyJiaPB3AZOK46vBVh3gFGYrdJELNDLmZkCnA06Ga4CcLwchO1NagPRNBhkVRzfmbtGY1vllLaW6NhePA9bxG3mf1VJDpjFqa+hhnxe3T0E7M9YPazEdGL9q39lWB3FHJNDqewnHy5vRgQIW2LMRjPOaJSu4Oydll4VMB//YNxrCvEELscL2Jc4yB/T7LdH0XsZW/pLAcOxk5AxlMLXKxti+Xheez1Grj4DA=","ak.pv":"4","ak.dpoabenc":"","ak.tf":i};if(""!==t)o["ak.ruds"]=t;var r={i:!1,av:function(n){var t="http.initiator";if(n&&(!n[t]||"spa_hard"===n[t]))o["ak.feo"]=void 0!==e.aFeoApplied?1:0,BOOMR.addVar(o)},rv:function(){var e=["ak.bpcip","ak.cport","ak.cr","ak.csrc","ak.gh","ak.ipv","ak.m","ak.n","ak.ol","ak.proto","ak.quicv","ak.tlsv","ak.0rtt","ak.0rtt.ed","ak.r","ak.acc","ak.t","ak.tf"];BOOMR.removeVar(e)}};BOOMR.plugins.AK={akVars:o,akDNSPreFetchDomain:a,init:function(){if(!r.i){var e=BOOMR.subscribe;e("before_beacon",r.av,null,null),e("onbeacon",r.rv,null,null),r.i=!0}return this},is_complete:function(){return!0}}}}()}(window);</script></head>
+    <body dir="ltr" class="body">
+    <div id="noScript" style="position:static; width:100%; height:100%; z-index:100">
+        <h1>JavaScript required</h1>
+        <p>JavaScript is required. This web browser does not support JavaScript or JavaScript in this web browser is not enabled.</p>
+        <p>To find out if your web browser supports JavaScript or to enable JavaScript, see web browser help.</p>
+    </div>
+    <script type="text/javascript" language="JavaScript">
+         document.getElementById("noScript").style.display = "none";
+    </script>
+    <div id="fullPage">
+        <div id="brandingWrapper" class="float">
+            <div id="branding"></div>
+        </div>
+        <div id="contentWrapper" class="float">
+            <div id="content">
+                <div id="header">
+                    gas.mcd.com
+                </div>
+                <div id="workArea">
+                    
+    <div id="authArea" class="groupMargin">
+        
+        
+        
+    <div id="loginArea">        
+        <div id="loginMessage" class="groupMargin">Sign in with your organizational account</div>
 
-    
-    <html lang="en">
-      <head>
-        <meta name="pageKey" content="d_homepage-guest-home">
-<!----><!----><!---->        <meta name="locale" content="en_US">
-        <meta id="config" data-app-version="2.1.2422" data-call-tree-id="AAY/F7SCJMjD5+LvaVzIxQ==" data-jet-tags="guest-homepage" data-multiproduct-name="homepage-guest-frontend" data-service-name="homepage-guest-frontend" data-browser-id="f770cf56-2047-4b7e-80d9-df2e8f3de20c" data-enable-page-view-heartbeat-tracking data-page-instance="urn:li:page:d_homepage-guest-home;RuDDwI1gQoO2XIN9vLUMCA==" data-disable-jsbeacon-pagekey-suffix="false" data-member-id="0" data-should-use-full-url-in-pve-path="true" data-dna-member-lix-treatment="enabled" data-human-member-lix-treatment="enabled" data-dfp-member-lix-treatment="control" data-sync-apfc-headers-lix-treatment="control" data-sync-apfc-cb-lix-treatment="control" data-recaptcha-v3-integration-lix-value="control" data-network-interceptor-lix-value="control">
+        <form method="post" id="loginForm" autocomplete="off" novalidate="novalidate" onKeyPress="if (event && event.keyCode == 13) Login.submitLoginRequest();" action="/adfs/ls?SAMLRequest=lVJNTwIxEP0rm973q3wIDUuCECMJ6oZFD95qOwtNdtu10wX990LBgAeJ3prpm3lv3psR8rqiDZu0bqOX8N4CuuCjrjSy409GWquZ4aiQaV4DMidYMXlYMBolrLHGGWEqEkwQwTpl9NRobGuwBditEvC8XGRk41yDLI7xWBO8hOj0DrXZRcLUsebbhq8hkoYEs70Kpflh3Ll5zTGqhfRgLkuMKyTBnbECvPiMlLxCIMF8lpHicSrTtOzf9PrlsCdFn8oOTVNR9geyO0iGvHMAYs4R1RbOrYgtzDU6rl1GaEJ7YTIMabpKO4xSlvSi7qD7SoL8tPat0lLp9XWP3o4gZPerVR7mT8XKD9gqCfZxj%2F6%2FPS9g0VuzH0%2FGIx8U89rtZXbXZfHvwMj4D%2Fyj%2BJLlxNmwg%2F75LDeVEp%2FBpKrMbmqBu%2F1Ozrbg46m5%2B11IGqW%2BomRYeihrNTYgVKlAknh8ov15n%2BMv&RelayState=https%3A%2F%2Fservicecafe.service-now.com%2Fnav_to.do%3Furi%3D%252Fproblem_list.do%253Fsysparm_query%253Dshort_descriptionLIKERMP%2520Proactive%2520Insight%255Eassigned_to%253D025453dddb99cc509de0ebd8489619a3%2526sysparm_first_row%253D1%2526sysparm_view%253D&SigAlg=http%3A%2F%2Fwww.w3.org%2F2000%2F09%2Fxmldsig%23rsa-sha1&Signature=tshy2fT7L%2FeRePqFnR%2BH5evJchWTwJZpY2wJGegRwEMFDy%2BZgXCiHWAs3zI26BnXBqr4%2F5IDa7KDZu1HMPgh1ni6lYGp9krditWeX37NXByyupVMJhLEvgUSmGRnu%2BQHPaHjinvG2tsOt7QUd%2Bc5u6gcO%2B4f99EGlBviEx2JbgxzTxAhTwudU44F7MkCLnhJgMbqWCqUOOrGpLaCXZbx0pV4BTGgUYIK72OKS5GchhpZLDlWedApoCjKC4UUuj5FTKWH3KkwZbREFli%2FHXJn7wi469INNSjM%2BOGT2Dfjmtgxg0hcbQ%2BvqpTV4kwTcd25RuCir5sQ16C%2B9pIlKgtHEQ%3D%3D&RedirectToIdentityProvider=AD+AUTHORITY&client-request-id=dc09b0af-7170-42a0-7901-0080022803ed" >
+            <div id="error" class="fieldMargin error smallText">
+                <span id="errorText" for=""></span>
+            </div>
 
-        <link rel="canonical" href="https://in.linkedin.com/">
-          <link rel="alternate" hreflang="de" href="https://de.linkedin.com/">
-          <link rel="alternate" hreflang="en-IE" href="https://ie.linkedin.com/">
-          <link rel="alternate" hreflang="en-US" href="https://www.linkedin.com/">
-          <link rel="alternate" hreflang="pt" href="https://pt.linkedin.com/">
-          <link rel="alternate" hreflang="en-IL" href="https://il.linkedin.com/">
-          <link rel="alternate" hreflang="ms-MY" href="https://my.linkedin.com/">
-          <link rel="alternate" hreflang="en-IN" href="https://in.linkedin.com/">
-          <link rel="alternate" hreflang="es-BO" href="https://bo.linkedin.com/">
-          <link rel="alternate" hreflang="en-ZA" href="https://za.linkedin.com/">
-          <link rel="alternate" hreflang="zh-CN" href="https://cn.linkedin.com/">
-          <link rel="alternate" hreflang="en-AU" href="https://au.linkedin.com/">
-          <link rel="alternate" hreflang="id" href="https://id.linkedin.com/">
-          <link rel="alternate" hreflang="en-NG" href="https://ng.linkedin.com/">
-          <link rel="alternate" hreflang="de-CH" href="https://ch.linkedin.com/">
-          <link rel="alternate" hreflang="ja-JP" href="https://jp.linkedin.com/">
-          <link rel="alternate" hreflang="en-ZW" href="https://zw.linkedin.com/">
-          <link rel="alternate" hreflang="en-JM" href="https://jm.linkedin.com/">
-          <link rel="alternate" hreflang="es-SV" href="https://sv.linkedin.com/">
-          <link rel="alternate" hreflang="ms" href="https://my.linkedin.com/">
-          <link rel="alternate" hreflang="es-GT" href="https://gt.linkedin.com/">
-          <link rel="alternate" hreflang="en" href="https://www.linkedin.com/">
-          <link rel="alternate" hreflang="es-CR" href="https://cr.linkedin.com/">
-          <link rel="alternate" hreflang="it" href="https://it.linkedin.com/">
-          <link rel="alternate" hreflang="es-CL" href="https://cl.linkedin.com/">
-          <link rel="alternate" hreflang="es" href="https://es.linkedin.com/">
-          <link rel="alternate" hreflang="zh" href="https://cn.linkedin.com/">
-          <link rel="alternate" hreflang="es-CO" href="https://co.linkedin.com/">
-          <link rel="alternate" hreflang="es-PE" href="https://pe.linkedin.com/">
-          <link rel="alternate" hreflang="ar" href="https://ae.linkedin.com/">
-          <link rel="alternate" hreflang="en-NZ" href="https://nz.linkedin.com/">
-          <link rel="alternate" hreflang="pt-PT" href="https://pt.linkedin.com/">
-          <link rel="alternate" hreflang="es-PA" href="https://pa.linkedin.com/">
-          <link rel="alternate" hreflang="ja" href="https://jp.linkedin.com/">
-          <link rel="alternate" hreflang="en-SG" href="https://sg.linkedin.com/">
-          <link rel="alternate" hreflang="fr-FR" href="https://fr.linkedin.com/">
-          <link rel="alternate" hreflang="ro" href="https://ro.linkedin.com/">
-          <link rel="alternate" hreflang="en-GB" href="https://uk.linkedin.com/">
-          <link rel="alternate" hreflang="nl" href="https://nl.linkedin.com/">
-          <link rel="alternate" hreflang="en-KE" href="https://ke.linkedin.com/">
-          <link rel="alternate" hreflang="no" href="https://no.linkedin.com/">
-          <link rel="alternate" hreflang="en-CA" href="https://ca.linkedin.com/">
-          <link rel="alternate" hreflang="ru" href="https://ru.linkedin.com/">
-          <link rel="alternate" hreflang="en-GH" href="https://gh.linkedin.com/">
-          <link rel="alternate" hreflang="es-PR" href="https://pr.linkedin.com/">
-          <link rel="alternate" hreflang="fr" href="https://fr.linkedin.com/">
-          <link rel="alternate" hreflang="es-DO" href="https://do.linkedin.com/">
-          <link rel="alternate" hreflang="de-AT" href="https://at.linkedin.com/">
-          <link rel="alternate" hreflang="es-EC" href="https://ec.linkedin.com/">
-          <link rel="alternate" hreflang="cs-CZ" href="https://cz.linkedin.com/">
-          <link rel="alternate" hreflang="en-PH" href="https://ph.linkedin.com/">
-          <link rel="alternate" hreflang="en-PK" href="https://pk.linkedin.com/">
-          <link rel="alternate" hreflang="de-DE" href="https://de.linkedin.com/">
-          <link rel="alternate" hreflang="sv" href="https://se.linkedin.com/">
-          <link rel="alternate" hreflang="ko" href="https://kr.linkedin.com/">
-          <link rel="alternate" hreflang="en-TT" href="https://tt.linkedin.com/">
-          <link rel="alternate" hreflang="zh-TW" href="https://tw.linkedin.com/">
-          <link rel="alternate" hreflang="en-HK" href="https://hk.linkedin.com/">
-          <link rel="alternate" hreflang="pt-BR" href="https://br.linkedin.com/">
-          <link rel="alternate" hreflang="es-UY" href="https://uy.linkedin.com/">
-          <link rel="alternate" hreflang="es-ES" href="https://es.linkedin.com/">
-          <link rel="alternate" hreflang="es-VE" href="https://ve.linkedin.com/">
-          <link rel="alternate" hreflang="es-MX" href="https://mx.linkedin.com/">
-          <link rel="alternate" hreflang="cs" href="https://cz.linkedin.com/">
-          <link rel="alternate" hreflang="es-AR" href="https://ar.linkedin.com/">
-          <link rel="alternate" hreflang="th" href="https://th.linkedin.com/">
-          <link rel="alternate" hreflang="sv-SE" href="https://se.linkedin.com/">
-          <link rel="alternate" hreflang="tl" href="https://ph.linkedin.com/">
-          <link rel="alternate" hreflang="da-DK" href="https://dk.linkedin.com/">
-          <link rel="alternate" hreflang="fr-LU" href="https://lu.linkedin.com/">
-          <link rel="alternate" hreflang="pl" href="https://pl.linkedin.com/">
-          <link rel="alternate" hreflang="da" href="https://dk.linkedin.com/">
-          <link rel="alternate" hreflang="tr" href="https://tr.linkedin.com/">
-            <link rel="alternate" hreflang="x-default" href="https://www.linkedin.com/">
+            <div id="formsAuthenticationArea">
+                <div id="userNameArea">
+                    <label id="userNameInputLabel" for="userNameInput" class="hidden">User Account</label>
+                    <input id="userNameInput" name="UserName" type="email" value="" tabindex="1" class="text fullWidth"
+                        spellcheck="false" placeholder="someone@example.com" autocomplete="off"/>
+                </div>
 
-<!---->
-<!---->
-          <meta property="al:android:url" content="https://in.linkedin.com/">
-          <meta property="al:android:package" content="com.linkedin.android">
-          <meta property="al:android:app_name" content="LinkedIn">
-          <meta property="al:ios:url" content="https://in.linkedin.com/">
-          <meta property="al:ios:app_store_id" content="288429040">
-          <meta property="al:ios:app_name" content="LinkedIn">
+                <div id="passwordArea">
+                    <label id="passwordInputLabel" for="passwordInput" class="hidden">Password</label>
+                    <input id="passwordInput" name="Password" type="password" tabindex="2" class="text fullWidth"
+                        placeholder="Password" autocomplete="off"/>
+                </div>
+                <div id="kmsiArea" style="display:none">
+                    <input type="checkbox" name="Kmsi" id="kmsiInput" value="true" tabindex="3" />
+                    <label for="kmsiInput">Keep me signed in</label>
+                </div>
+                <div id="submissionArea" class="submitMargin">
+                    <span id="submitButton" class="submit" tabindex="4" role="button"
+                        onKeyPress="if (event && event.keyCode == 32) Login.submitLoginRequest();"
+                        onclick="return Login.submitLoginRequest();">Sign in</span>
+                </div>
+            </div>
+            <input id="optionForms" type="hidden" name="AuthMethod" value="FormsAuthentication"/>
+        </form>
 
-          <link rel="manifest" href="/homepage-guest/manifest.json" crossorigin="use-credentials">
+             <div id="authOptions">
+        <form id="options"  method="post" action="https://gas.mcd.com:443/adfs/ls?SAMLRequest=lVJNTwIxEP0rm973q3wIDUuCECMJ6oZFD95qOwtNdtu10wX990LBgAeJ3prpm3lv3psR8rqiDZu0bqOX8N4CuuCjrjSy409GWquZ4aiQaV4DMidYMXlYMBolrLHGGWEqEkwQwTpl9NRobGuwBditEvC8XGRk41yDLI7xWBO8hOj0DrXZRcLUsebbhq8hkoYEs70Kpflh3Ll5zTGqhfRgLkuMKyTBnbECvPiMlLxCIMF8lpHicSrTtOzf9PrlsCdFn8oOTVNR9geyO0iGvHMAYs4R1RbOrYgtzDU6rl1GaEJ7YTIMabpKO4xSlvSi7qD7SoL8tPat0lLp9XWP3o4gZPerVR7mT8XKD9gqCfZxj%2F6%2FPS9g0VuzH0%2FGIx8U89rtZXbXZfHvwMj4D%2Fyj%2BJLlxNmwg%2F75LDeVEp%2FBpKrMbmqBu%2F1Ozrbg46m5%2B11IGqW%2BomRYeihrNTYgVKlAknh8ov15n%2BMv&RelayState=https%3A%2F%2Fservicecafe.service-now.com%2Fnav_to.do%3Furi%3D%252Fproblem_list.do%253Fsysparm_query%253Dshort_descriptionLIKERMP%2520Proactive%2520Insight%255Eassigned_to%253D025453dddb99cc509de0ebd8489619a3%2526sysparm_first_row%253D1%2526sysparm_view%253D&SigAlg=http%3A%2F%2Fwww.w3.org%2F2000%2F09%2Fxmldsig%23rsa-sha1&Signature=tshy2fT7L%2FeRePqFnR%2BH5evJchWTwJZpY2wJGegRwEMFDy%2BZgXCiHWAs3zI26BnXBqr4%2F5IDa7KDZu1HMPgh1ni6lYGp9krditWeX37NXByyupVMJhLEvgUSmGRnu%2BQHPaHjinvG2tsOt7QUd%2Bc5u6gcO%2B4f99EGlBviEx2JbgxzTxAhTwudU44F7MkCLnhJgMbqWCqUOOrGpLaCXZbx0pV4BTGgUYIK72OKS5GchhpZLDlWedApoCjKC4UUuj5FTKWH3KkwZbREFli%2FHXJn7wi469INNSjM%2BOGT2Dfjmtgxg0hcbQ%2BvqpTV4kwTcd25RuCir5sQ16C%2B9pIlKgtHEQ%3D%3D&RedirectToIdentityProvider=AD+AUTHORITY&client-request-id=dc09b0af-7170-42a0-7901-0080022803ed">
+            <script type="text/javascript">
+                function SelectOption(option) {
+                    var i = document.getElementById('optionSelection');
+                    i.value = option;
+                    document.forms['options'].submit();
+                    return false;
+                }
+            </script>
+            <input id="optionSelection" type="hidden" name="AuthMethod" />
+            <div id='authOptionLinks' class='groupMargin'><a class="actionLink" href="#" id="AzurePrimaryAuthentication" onclick="SelectOption('AzurePrimaryAuthentication'); return false;">Azure Multi-Factor Authentication</a></div>
+        </form>
+      </div>
 
-          <link rel="icon" href="https://static.licdn.com/aero-v1/sc/h/al2o9zrvru7aqj8e1x2rzsrca">
+        <div id="introduction" class="groupMargin">
+                                 
+        </div>
 
+        <script type="text/javascript">
+        //<![CDATA[
 
-        <script>
-          function getDfd() {let yFn,nFn;const p=new Promise(function(y, n){yFn=y;nFn=n;});p.resolve=yFn;p.reject=nFn;return p;}
-          window.lazyloader = getDfd();
-          window.tracking = getDfd();
-          window.impressionTracking = getDfd();
-          window.ingraphTracking = getDfd();
-          window.appDetection = getDfd();
-          window.pemTracking = getDfd();
+            function Login() {
+            }
+
+            Login.userNameInput = 'userNameInput';
+            Login.passwordInput = 'passwordInput';
+
+            Login.initialize = function () {
+
+                var u = new InputUtil();
+
+                u.checkError();
+                u.setInitialFocus(Login.userNameInput);
+                u.setInitialFocus(Login.passwordInput);
+            }();
+
+            Login.submitLoginRequest = function () { 
+                var u = new InputUtil();
+                var e = new LoginErrors();
+
+                var userName = document.getElementById(Login.userNameInput);
+                var password = document.getElementById(Login.passwordInput);
+
+                if (!userName.value || !userName.value.match('[@\\\\]')) {
+                    u.setError(userName, e.userNameFormatError);
+                    return false;
+                }
+
+                if (!password.value) {
+                    u.setError(password, e.passwordEmpty);
+                    return false;
+                }
+
+                if (password.value.length > maxPasswordLength) {
+                    u.setError(password, e.passwordTooLong);
+                    return false;
+                }
+
+                document.forms['loginForm'].submit();
+                return false;
+            };
+
+            InputUtil.makePlaceholder(Login.userNameInput);
+            InputUtil.makePlaceholder(Login.passwordInput);
+        //]]>
         </script>
-
-<!---->
-        
-        
-
-    
-
-    <title>LinkedIn India: Log In or Sign Up</title>
-    <meta property="og:site_name" content="LinkedIn">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta property="og:title" content="LinkedIn India: Log In or Sign Up">
-    <meta property="og:description" content="1 billion members | Manage your professional identity. Build and engage with your professional network. Access knowledge, insights and opportunities.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://in.linkedin.com/">
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:site" content="@linkedin">
-    <meta name="twitter:title" content="LinkedIn India: Log In or Sign Up">
-    <meta name="twitter:description" content="1 billion members | Manage your professional identity. Build and engage with your professional network. Access knowledge, insights and opportunities.">
-    <meta name="description" content="1 billion members | Manage your professional identity. Build and engage with your professional network. Access knowledge, insights and opportunities.">
-    <meta name="linkedin:pageTag" content="basic">
-      <meta name="naver-site-verification" content="6c180087cc8c9aef0b448521383709b955b7dc5b">
-    <meta name="litmsProfileName" content="homepage-guest-frontend">
-      <meta name="clientSideIngraphs" content="1" data-gauge-metric-endpoint="/homepage-guest/api/ingraphs/gauge" data-counter-metric-endpoint="/homepage-guest/api/ingraphs/counter">
-    <meta name="robots" content="noarchive">
-  
-        <link rel="stylesheet" href="https://static.licdn.com/aero-v1/sc/h/46za0vnktzfl7m9zsard5dka8">
-      
-<!---->      </head>
-      <body dir="ltr">
-<!---->          
-          
-    
-
-    <a href="#main-content" class="skip-link btn-md btn-primary absolute z-11 -top-[100vh] focus:top-0">
-      Skip to main content
-    </a>
-  
-<!---->
-        
-        
-    <div class="guest-upsells">
-        
-    
-    
-    
-    <form class="google-auth base-google-auth" action="https://www.linkedin.com/uas/login-submit" method="post">
-      <input name="loginCsrfParam" value="f770cf56-2047-4b7e-80d9-df2e8f3de20c" type="hidden">
-<!---->      <input name="trk" value="guest_homepage-basic_google-one-tap-submit" type="hidden">
-        <div class="google-one-tap__module hidden fixed flex flex-col items-center top-[20px] right-[20px] z-[9999]">
-          <div class="google-auth__tnc-container hidden relative top-2 bg-color-background-container-tint pl-2 pr-1 pt-2 pb-3 w-[375px] rounded-md shadow-2xl">
-            <p class="text-md font-bold text-color-text">
-              Agree & Join LinkedIn
-            </p>
-            
-    
-    
-    <p class="linkedin-tc__text text-color-text-low-emphasis text-xs pb-2 !text-sm !text-color-text" data-impression-id="guest_homepage-basic_one-tap-skip-tc-text">
-      By clicking Continue to join or sign in, you agree to LinkedIn’s <a href="/legal/user-agreement?trk=linkedin-tc_auth-button_user-agreement" target="_blank" data-tracking-control-name="linkedin-tc_auth-button_user-agreement" data-tracking-will-navigate="true">User Agreement</a>, <a href="/legal/privacy-policy?trk=linkedin-tc_auth-button_privacy-policy" target="_blank" data-tracking-control-name="linkedin-tc_auth-button_privacy-policy" data-tracking-will-navigate="true">Privacy Policy</a>, and <a href="/legal/cookie-policy?trk=linkedin-tc_auth-button_cookie-policy" target="_blank" data-tracking-control-name="linkedin-tc_auth-button_cookie-policy" data-tracking-will-navigate="true">Cookie Policy</a>.
-    </p>
-  
-          </div>
-          <div data-tracking-control-name="guest_homepage-basic_google-one-tap" id="google-one-tap__container"></div>
-        </div>
-      
-    <div class="loader loader--full-screen">
-      <div class="loader__container mb-2 overflow-hidden">
-        <icon class="loader__icon inline-block loader__icon--default text-color-progress-loading" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/ddi43qwelxeqjxdd45pe3fvs1" data-svg-class-name="loader__icon-svg--large fill-currentColor h-[60px] min-h-[60px] w-[60px] min-w-[60px]"></icon>
-      </div>
     </div>
-  
-    </form>
-    <script data-delayed-url="https://static.licdn.com/aero-v1/sc/h/29rdkxlvag0d3cpj96fiilbju" data-module-id="google-gsi-lib"></script>
-    <code id="isLinkedInAppWebView" style="display: none"><!--false--></code>
-    <code id="shouldRemoveUndefinedValues" style="display: none"><!--false--></code>
-    <code id="isItpSupportEnabled" style="display: none"><!--false--></code>
-    <code id="tncFlow" style="display: none"><!--"control"--></code>
-      <code id="isGoogleAuthButtonLocaleSupportEnabled" style="display: none"><!--true--></code>
-      <code id="gsiLocale" style="display: none"><!--"en_US"--></code>
-  
 
-<!---->
-      
-    
-    
-    
-
-    
-    
-
-      
-
-    
-
-      <div class="cta-modal overflow-hidden container-raised z-10 fixed bottom-3 right-3 min-h-[56px] p-2 babybear:hidden windows-app-upsell windows-app-upsell--msft flex flex-col p-2 w-[359px] !bg-[#F1F8FA] opacity-90 backdrop-blur-[2px] z-1" data-impression-id="guest_homepage-basic_windows-app-upsell_cta-modal" role="dialog" aria-labelledby="cta-modal-header" aria-describedby="cta-modal-subheader">
-          
-
-          
-
-        
-        <div class="windows-app-upsell__linkedin-title-container pt-[6px] mb-1.5 flex align-center">
-          <icon class="windows-app-upsell__linkedin-bug-icon block w-[21px] h-[21px]" data-svg-class-name="windows-app-upsell__linkedin-bug-icon-svg w-[21px] h-[21px]" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/euqjj7tf5wvr33frd3x1jj9s"></icon>
-          <p class="windows-app-upsell__linkedin-title uppercase text-xs text-color-text-secondary leading-[21px] ml-1">
-            LinkedIn
-          </p>
-        </div>
-        <p class="windows-app-upsell__title font-sans text-md text-color-text-accent-4-hover font-semibold leading-regular mb-1">
-          LinkedIn is better on the app
-        </p>
-        <p class="windows-app-upsell__body font-sans text-sm text-color-text-secondary leading-regular">
-          Don’t have the app? Get it in the Microsoft Store.
-        </p>
-        <a class="windows-app-upsell__cta btn-sm btn-secondary-emphasis mt-2 mb-[6px] w-fit" href="ms-windows-store://pdp/?ProductId=9WZDNCRFJ4Q7&amp;mode=mini&amp;cid=guest_desktop_upsell" data-tracking-client-ingraph data-tracking-control-name="guest_homepage-basic_windows-app-upsell_cta" data-tracking-will-navigate>
-          Open the app
-        </a>
-      
-
-        <button class="cta-modal__dismiss-btn absolute h-4 w-4 p-1 top-2 right-2 hover:cursor-pointer focus:outline focus:outline-2 focus:outline-color-action" data-tracking-control-name="guest_homepage-basic_windows-app-upsell_dismiss" aria-label="Dismiss">
-          <icon class="cta-modal__dismiss-icon block h-2 w-2 onload" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/adzjokfylbe8pvjr9h8iv96mw"></icon>
-        </button>
-      </div>
-  
-  
     </div>
-    <code id="disableOneTapOnInitIfCsm" style="display: none"><!--false--></code>
-  
-          
-    <form class="microsoft-auth" action="https://www.linkedin.com/uas/login-submit" method="post">
-      <input name="loginCsrfParam" value="f770cf56-2047-4b7e-80d9-df2e8f3de20c" type="hidden">
 
-<!---->
-      <input name="trk" value="guest_homepage-basic_microsoft-auth-submit" type="hidden">
-      
-    <div class="loader loader--full-screen">
-      <div class="loader__container mb-2 overflow-hidden">
-        <icon class="loader__icon inline-block loader__icon--default text-color-progress-loading" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/ddi43qwelxeqjxdd45pe3fvs1" data-svg-class-name="loader__icon-svg--large fill-currentColor h-[60px] min-h-[60px] w-[60px] min-w-[60px]"></icon>
-      </div>
-    </div>
-  
-    </form>
-
-    <script data-delayed-url="https://static.licdn.com/aero-v1/sc/h/fx69lqty609xpf6l4xb6bs3a" data-module-id="microsoft-auth-lib"></script>
-    <code id="isMicrosoftTermsAndConditionsSkipEnabled" style="display: none"><!--false--></code>
-    <code id="microsoftAuthLibraryPath" style="display: none"><!--"https://static.licdn.com/aero-v1/sc/h/fx69lqty609xpf6l4xb6bs3a"--></code>
-    <code id="microsoftShowOneTap" style="display: none"><!--false--></code>
-    <code id="microsoftLocale" style="display: none"><!--"en_US"--></code>
-  
-        
-
-    
-    
-    
-    
-
-    <nav class="nav pt-1.5 pb-2 flex items-center justify-between relative flex-nowrap babymamabear:py-1.5
-        
-        
-         babybear:flex-wrap " aria-label="Primary">
-
-      <a href="/?trk=guest_homepage-basic_nav-header-logo" class="nav__logo-link link-no-visited-state z-1 mr-auto min-h-[52px] flex items-center babybear:z-0 hover:no-underline focus:no-underline active:no-underline
-          " data-tracking-control-name="guest_homepage-basic_nav-header-logo" data-tracking-will-navigate>
-          
-    
-    <span class="sr-only">LinkedIn</span>
-      <icon class="nav-logo--inbug flex text-color-brand
-          papabear:hidden mamabear:hidden order-1" data-svg-class-name="h-[34px] w-[34px] babybear:h-[26px] babybear:w-[26px]" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/4zqr0f9jf98vi2nkijyc3bex2"></icon>
-      <icon class="block text-color-brand w-[102px] h-[26px] babybear:hidden order-1" data-test-id="nav-logo" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/8fkga714vy9b2wk5auqo5reeb"></icon>
-  
-      </a>
-
-<!---->
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    <ul class="top-nav-menu flex items-center babybear:w-full babybear:justify-between babybear:pt-1 justify-start w-max pt-0 overflow-x-auto
-        
-         nav__menu babybear:order-last order-3 ml-auto">
-        <li class>
-          
-    <a href="https://www.linkedin.com/pulse/topics/home/?trk=guest_homepage-basic_guest_nav_menu_articles" data-tracking-control-name="guest_homepage-basic_guest_nav_menu_articles" data-tracking-will-navigate class="top-nav-link flex justify-center items-center min-h-[52px] hover:text-color-text visited:hover:text-color-text hover:no-underline
-        w-8 
-        flex-col mx-1 babybear:mx-0
-        text-color-text-secondary visited:text-color-text-secondary">
-      <icon class="top-nav-link__icon flex h-3 w-3 flex-shrink-0 justify-center " data-delayed-url="https://static.licdn.com/aero-v1/sc/h/6ulnj3n2ijcmhej768y6oj1hr">
-      </icon>
-      <span class="top-nav-link__label-text font-sans text-xs leading-regular text-center w-max
-          font-regular">
-        Articles
-      </span>
-    </a>
-  
-        </li>
-        <li class>
-          
-    <a href="https://www.linkedin.com/pub/dir/+/+?trk=guest_homepage-basic_guest_nav_menu_people" data-tracking-control-name="guest_homepage-basic_guest_nav_menu_people" data-tracking-will-navigate class="top-nav-link flex justify-center items-center min-h-[52px] hover:text-color-text visited:hover:text-color-text hover:no-underline
-        w-8 
-        flex-col mx-1 babybear:mx-0
-        text-color-text-secondary visited:text-color-text-secondary">
-      <icon class="top-nav-link__icon flex h-3 w-3 flex-shrink-0 justify-center " data-delayed-url="https://static.licdn.com/aero-v1/sc/h/7kb6sn3tm4cx918cx9a5jlb0">
-      </icon>
-      <span class="top-nav-link__label-text font-sans text-xs leading-regular text-center w-max
-          font-regular">
-        People
-      </span>
-    </a>
-  
-        </li>
-        <li class>
-          
-    <a href="https://www.linkedin.com/learning/search?trk=guest_homepage-basic_guest_nav_menu_learning" data-tracking-control-name="guest_homepage-basic_guest_nav_menu_learning" data-tracking-will-navigate class="top-nav-link flex justify-center items-center min-h-[52px] hover:text-color-text visited:hover:text-color-text hover:no-underline
-        w-8 
-        flex-col mx-1 babybear:mx-0
-        text-color-text-secondary visited:text-color-text-secondary">
-      <icon class="top-nav-link__icon flex h-3 w-3 flex-shrink-0 justify-center " data-delayed-url="https://static.licdn.com/aero-v1/sc/h/8wykgzgbqy0t3fnkgborvz54u">
-      </icon>
-      <span class="top-nav-link__label-text font-sans text-xs leading-regular text-center w-max
-          font-regular">
-        Learning
-      </span>
-    </a>
-  
-        </li>
-        <li class>
-          
-    <a href="https://www.linkedin.com/jobs/search?trk=guest_homepage-basic_guest_nav_menu_jobs" data-tracking-control-name="guest_homepage-basic_guest_nav_menu_jobs" data-tracking-will-navigate class="top-nav-link flex justify-center items-center min-h-[52px] hover:text-color-text visited:hover:text-color-text hover:no-underline
-        w-8 
-        flex-col mx-1 babybear:mx-0
-        text-color-text-secondary visited:text-color-text-secondary">
-      <icon class="top-nav-link__icon flex h-3 w-3 flex-shrink-0 justify-center " data-delayed-url="https://static.licdn.com/aero-v1/sc/h/92eb1xekc34eklevj0io6x4ki">
-      </icon>
-      <span class="top-nav-link__label-text font-sans text-xs leading-regular text-center w-max
-          font-regular">
-        Jobs
-      </span>
-    </a>
-  
-        </li>
-        <li class>
-          
-    <a href="https://www.linkedin.com/games?trk=guest_homepage-basic_guest_nav_menu_games" data-tracking-control-name="guest_homepage-basic_guest_nav_menu_games" data-tracking-will-navigate class="top-nav-link flex justify-center items-center min-h-[52px] hover:text-color-text visited:hover:text-color-text hover:no-underline
-        w-8 
-        flex-col mx-1 babybear:mx-0
-        text-color-text-secondary visited:text-color-text-secondary">
-      <icon class="top-nav-link__icon flex h-3 w-3 flex-shrink-0 justify-center " data-delayed-url="https://static.licdn.com/aero-v1/sc/h/29h8hsjuomfp50lam5ipnc3uh">
-      </icon>
-      <span class="top-nav-link__label-text font-sans text-xs leading-regular text-center w-max
-          font-regular">
-        Games
-      </span>
-    </a>
-  
-        </li>
-        <li class>
-          
-    <a href="ms-windows-store://pdp/?ProductId=9WZDNCRFJ4Q7&amp;mode=mini&amp;cid=guest_nav_upsell&amp;trk=guest_homepage-basic_guest_nav_menu_windows" data-tracking-control-name="guest_homepage-basic_guest_nav_menu_windows" data-tracking-will-navigate class="top-nav-link flex justify-center items-center min-h-[52px] hover:text-color-text visited:hover:text-color-text hover:no-underline
-        w-[96px] px-1 border-solid border-l-1 border-r-1 babybear:border-r-0 border-color-border-faint
-        flex-col mx-1 babybear:mx-0
-        text-color-text-secondary visited:text-color-text-secondary">
-      <icon class="top-nav-link__icon flex h-3 w-3 flex-shrink-0 justify-center " data-delayed-url="https://static.licdn.com/aero-v1/sc/h/admayac2rnonsqhz9v3rzwcyu">
-      </icon>
-      <span class="top-nav-link__label-text font-sans text-xs leading-regular text-center w-max
-          font-regular">
-        Get the app
-      </span>
-    </a>
-  
-        </li>
-    </ul>
-  
-
-      <div class="nav__cta-container order-3 flex gap-x-1 justify-end min-w-[100px] flex-nowrap flex-shrink-0 babybear:flex-wrap flex-2
-          ">
-          
-  
-  
-
-      
-      <a class="nav__button-secondary btn-md btn-secondary-emphasis ml-3" href="https://www.linkedin.com/login?fromSignIn=true&amp;trk=guest_homepage-basic_nav-header-signin" data-tracking-control-name="guest_homepage-basic_nav-header-signin" data-tracking-will-navigate data-tracking-client-ingraph>
-          Sign in
-      </a>
-
-
-        
-    
-            
-              <a class="nav__button-tertiary btn-md btn-primary relative" href="https://www.linkedin.com/signup?trk=guest_homepage-basic_nav-header-join" data-tracking-control-name="guest_homepage-basic_nav-header-join" data-tracking-will-navigate>
-                Join now<span class="top-[-1px] right-[-1px] w-2 h-2 badge badge-alert"></span>              </a>
-          
-          
-
-
-<!---->
-<!---->      </div>
-
-<!---->
-<!---->    </nav>
-  
-        <main class="flex flex-col items-center overflow-hidden min-h-[calc(100vh-76px-50px)]" role="main" id="main-content">
-          
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-
-    <section class="section min-h-68 flex-nowrap pt-6 babybear:flex-col babybear:min-h-0 babybear:px-mobile-container-padding babybear:pt-3" data-test-id="hero">
-      <div class="self-start relative flex-shrink-0 w-[55%] pr-6 babybear:w-full babybear:pr-0" data-test-id="hero__content">
-        <h1 class="font-sans babybear:pb-3 font-regular leading-regular text-display-lg text-smoke-70 babybear:text-display-md babybear:text-center" data-test-id="hero__headline">
-          Explore jobs and grow your professional network
-        </h1>
-
-<!---->
-        
-            <!--400px width and 40px height made standard to match other buttons to Google limitations-->
-            <!--https://developers.google.com/identity/gsi/web/reference/js-reference#width-->
-            <!--Size controls height/padding. Large hits 40px. https://developers.google.com/identity/gsi/web/reference/js-reference#size-->
-          <div class="mt-3 w-column max-w-[400px] babybear:mt-0 babybear:w-full">
-            
-    
-
-    <div class="google-auth-button google-auth-button--without-signin-form mb-2 mx-auto text-center">
-<!---->      <div class="google-auth-button__placeholder mx-auto
-          " data-theme="filled_blue" data-logo-alignment="center" data-locale="en_US" role="button" aria-label="Continue with google" data-safe-to-skip-tnc-redirect></div>
-<!---->    </div>
-  
-              
-    <div class="microsoft-auth-button w-full my-2 w-full max-w-[400px] mx-auto">
-<!---->      <div class="microsoft-auth-button__placeholder" data-height="40"></div>
-    </div>
-  
-              <a class="sign-in-form__sign-in-cta my-2 py-1 btn-md btn-secondary block min-h-[40px] babybear:w-full" href="https://www.linkedin.com/login" data-test-id="home-hero-sign-in-cta" data-tracking-control-name="homepage-basic_home-hero-sign-in-cta" data-tracking-will-navigate data-tracking-client-ingraph>
-                  Sign in with email
-                </a>      
-                          <code id="isTermsAndConditionsSkipEnabledAuthButton" style="display: none"><!--true--></code>
-              
-    
-    
-    <p class="linkedin-tc__text text-color-text-low-emphasis text-xs pb-2 text-center mt-3" data-impression-id="linkedin-tc__button-skip-tc-text">
-      By clicking Continue to join or sign in, you agree to LinkedIn’s <a href="/legal/user-agreement?trk=linkedin-tc_auth-button_user-agreement" target="_blank" data-tracking-control-name="linkedin-tc_auth-button_user-agreement" data-tracking-will-navigate="true">User Agreement</a>, <a href="/legal/privacy-policy?trk=linkedin-tc_auth-button_privacy-policy" target="_blank" data-tracking-control-name="linkedin-tc_auth-button_privacy-policy" data-tracking-will-navigate="true">Privacy Policy</a>, and <a href="/legal/cookie-policy?trk=linkedin-tc_auth-button_cookie-policy" target="_blank" data-tracking-control-name="linkedin-tc_auth-button_cookie-policy" data-tracking-will-navigate="true">Cookie Policy</a>.
-    </p>
-  
-          </div>
-          <p class="sign-in-form__join-cta-wrapper text-center my-2 w-column babybear:w-full">
-            New to LinkedIn? <a href="https://www.linkedin.com/signup" class="sign-in-form__join-cta link link-no-visited-state" data-test-id="sign-in-join-cta" data-tracking-client-ingraph="true" data-tracking-control-name="homepage-basic_sign-in-form_inline-join-cta" data-tracking-will-navigate="true">Join now</a>
-          </p>
-<!---->      
-      </div>
-        <img class="flip-rtl block -z-1 w-[700px] h-[560px] relative flex-shrink babybear:w-[374px] babybear:h-[214px] babybear:static" alt="Explore jobs and grow your professional network" data-test-id="hero__illustration" src="https://media.licdn.com/media//AAYAAgSrAAgAAQAAAAAAAGM6w-NyPk-_SVikYiCJ6V3Z-Q.png">
-    </section>
-  
-  
-<!---->                
-    
-    
-    
-    
-    
-  <section class="section py-section flex-wrap babybear:flex-col papabear:flex-row papabear:items-start explore-content-hub" data-test-id="explore-content">
-      <div class="self-start mb-3 w-full flex-shrink-0 papabear:mr-[72px] papabear:w-column" data-test-id="pill-list-module__cta">
-        <h2 class="header">
-          Explore collaborative articles
-        </h2>
-            <p class="body mt-1.5">
-              We’re unlocking community knowledge in a new way. Experts add insights directly into each article, started with the help of AI.
-            </p>
-
-        
-      </div>
-
-        <div class="w-full papabear:max-w-[calc(theme('spacing.content-max-w')-theme('spacing.column')-72px)]">
-          
-
-    
-    
-    
-
-      <ul class="show-more-less__list show-more-less__list--no-hidden-elems etta-show-more-less" data-impression-id="homepage-basic_explore-content_pill-list-module_etta-show-more-less_show-more-less">
-        
-        
-              
-          <li class="explore-content__pill">
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_explore-content_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/pulse/topics/marketing-s2461/">
-          
-              Marketing
-            
-        </a>
-  
-          </li>
-          <li class="explore-content__pill">
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_explore-content_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/pulse/topics/public-administration-s3697/">
-          
-              Public Administration
-            
-        </a>
-  
-          </li>
-          <li class="explore-content__pill">
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_explore-content_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/pulse/topics/healthcare-s282/">
-          
-              Healthcare
-            
-        </a>
-  
-          </li>
-          <li class="explore-content__pill">
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_explore-content_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/pulse/topics/engineering-s166/">
-          
-              Engineering
-            
-        </a>
-  
-          </li>
-          <li class="explore-content__pill">
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_explore-content_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/pulse/topics/it-services-s57547/">
-          
-              IT Services
-            
-        </a>
-  
-          </li>
-          <li class="explore-content__pill">
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_explore-content_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/pulse/topics/sustainability-s932/">
-          
-              Sustainability
-            
-        </a>
-  
-          </li>
-          <li class="explore-content__pill">
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_explore-content_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/pulse/topics/business-administration-s50111/">
-          
-              Business Administration
-            
-        </a>
-  
-          </li>
-          <li class="explore-content__pill">
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_explore-content_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/pulse/topics/telecommunications-s314/">
-          
-              Telecommunications
-            
-        </a>
-  
-          </li>
-          <li class="explore-content__pill">
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_explore-content_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/pulse/topics/hr-management-s50359/">
-          
-              HR Management
-            
-        </a>
-  
-          </li>
-        <li class="explore-content__pill">
-          
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary-emphasis" data-tracking-control-name="homepage-basic_explore-content_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/pulse/topics/home/" aria-label="Show all collaborative articles">
-          
-            Show all
-          
-        </a>
-  
-        </li>
-      
-            
-      
-      </ul>
-  
-  
-        </div>
-    </section>
-  
-  
-                            
-    
-
-    
-  <section class="section py-section flex-wrap babybear:flex-col papabear:flex-row papabear:items-start" data-test-id="search-cta">
-      <div class="self-start mb-3 w-full flex-shrink-0 papabear:mr-[72px] papabear:w-column" data-test-id="pill-list-module__cta">
-        <h2 class="header">
-          Find the right job or internship for you
-        </h2>
-<!---->
-        
-      </div>
-
-        <div class="w-full papabear:max-w-[calc(theme('spacing.content-max-w')-theme('spacing.column')-72px)]">
-          
-
-    
-    
-    
-
-      <div class="show-more-less etta-show-more-less">
-<!---->
-        <ul data-max-num-to-show="10" class="show-more-less__list show-more-less__list--hide-after-10" data-impression-id="homepage-basic_pill-list-module_etta-show-more-less_show-more-less">
-          
-        
-              
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/engineering-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Engineering
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/business-development-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Business Development
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/finance-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Finance
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/administrative-assistant-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Administrative Assistant
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/retail-associate-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Retail Associate
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/customer-service-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Customer Service
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/operations-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Operations
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/information-technology-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Information Technology
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/marketing-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Marketing
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/human-resources-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Human Resources
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/healthcare-services-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Healthcare Service
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/sales-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Sales
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/program-and-project-management-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Program and Project Management
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/accounting-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Accounting
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/arts-and-design-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Arts and Design
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/community-and-social-services-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Community and Social Services
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/consulting-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Consulting
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/education-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Education
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/entrepreneurship-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Entrepreneurship
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/legal-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Legal
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/media-and-communications-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Media and Communications
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/military-and-protective-services-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Military and Protective Services
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/product-management-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Product Management
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/purchasing-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Purchasing
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/quality-assurance-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Quality Assurance
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/real-estate-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Real Estate
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/research-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Research
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/support-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Support
-        
-        </a>
-  
-      </li>
-      <li>
-        
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_suggested-search" data-tracking-will-navigate href="https://in.linkedin.com/jobs/administrative-jobs-tirupati?trk=homepage-basic_suggested-search" data-tracking-client-ingraph>
-          
-          Administrative
-        
-        </a>
-  
-      </li>
-  
-      
-            
-      
-        </ul>
-
-            <button class="show-more-less__button show-more-less__more-button show-more-less-button
-                " aria-expanded="false" data-tracking-control-name="homepage-basic_pill-list-module_etta-show-more-less_show_more">
-                Show more
-              <icon class="show-more-less__button--chevron show-more-less-button-icon" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/cyolgscd0imw2ldqppkrb84vo"></icon>
-            </button>
-
-            <button class="show-more-less__button show-more-less__less-button show-more-less-button
-                show-more-less__button--hide" aria-expanded="false" data-tracking-control-name="homepage-basic_pill-list-module_etta-show-more-less_show_more">
-                Show less
-              <icon class="show-more-less__button--chevron show-more-less-button-icon" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/4chtt12k98xwnba1nimld2oyg"></icon>
-            </button>
-      </div>
-  
-  
-        </div>
-    </section>
-  
-  
-                <section class="section">
-                  
-    
-    
-
-    <div class="w-full flex items-center py-8 after:full-color-bkg after:content-[''] flex-col
-        after:bg-[#f1ece5]
-        babybear:flex-col babybear:items-start babybear:py-6 babybear:px-mobile-container-padding" data-impression-id="homepage-basic_talent-finder-cta" data-test-id="talent-finder-cta">
-      <h2 class="header !text-warm-red-70 text-center pb-4 babybear:mb-3">
-        Post your job for millions of people to see
-      </h2>
-      
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary-emphasis flex-shrink babybear:my-auto babybear:mx-0" data-tracking-control-name="homepage-basic_talent-finder-cta" data-tracking-will-navigate href="https://www.linkedin.com/talent/post-a-job?trk=homepage-basic_talent-finder-cta">
-          
-        Post a job
-      
-        </a>
-  
-    </div>
-  
-                </section>
-              
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-  <section class="section py-section flex-wrap babybear:flex-col papabear:flex-row papabear:items-start top-product-categories">
-      <div class="self-start mb-3 w-full flex-shrink-0 papabear:mr-[72px] papabear:w-column" data-test-id="pill-list-module__cta">
-        <h2 class="header">
-          Discover the best software tools
-        </h2>
-            <p class="body mt-1.5">
-              Connect with buyers who have first-hand experience to find the best products for you.
-            </p>
-
-        
-      </div>
-
-        <div class="w-full papabear:max-w-[calc(theme('spacing.content-max-w')-theme('spacing.column')-72px)]">
-          
-
-    
-    
-    
-
-      <ul class="show-more-less__list show-more-less__list--no-hidden-elems etta-show-more-less" data-impression-id="homepage-basic_discover_products_pill-list-module_etta-show-more-less_show-more-less">
-        
-        
-              
-          <li class="top-product-categories__pill">
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_top-product-categories_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/products/categories/e-commerce-platforms">
-          
-              E-Commerce Platforms
-            
-        </a>
-  
-          </li>
-          <li class="top-product-categories__pill">
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_top-product-categories_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/products/categories/customer-relationship-management-software">
-          
-              CRM Software
-            
-        </a>
-  
-          </li>
-          <li class="top-product-categories__pill">
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_top-product-categories_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/products/categories/human-resources-management-systems">
-          
-              Human Resources Management Systems
-            
-        </a>
-  
-          </li>
-          <li class="top-product-categories__pill">
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_top-product-categories_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/products/categories/recruiting-software">
-          
-              Recruiting Software
-            
-        </a>
-  
-          </li>
-          <li class="top-product-categories__pill">
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_top-product-categories_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/products/categories/sales-intelligence-software">
-          
-              Sales Intelligence Software
-            
-        </a>
-  
-          </li>
-          <li class="top-product-categories__pill">
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_top-product-categories_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/products/categories/project-management-software">
-          
-              Project Management Software
-            
-        </a>
-  
-          </li>
-          <li class="top-product-categories__pill">
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_top-product-categories_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/products/categories/help-desk-software">
-          
-              Help Desk Software
-            
-        </a>
-  
-          </li>
-          <li class="top-product-categories__pill">
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_top-product-categories_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/products/categories/social-networking-software">
-          
-              Social Networking Software
-            
-        </a>
-  
-          </li>
-          <li class="top-product-categories__pill">
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_top-product-categories_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/products/categories/desktop-publishing-software">
-          
-              Desktop Publishing Software
-            
-        </a>
-  
-          </li>
-        <li class="top-product-categories__pill">
-          
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary-emphasis" data-tracking-control-name="homepage-basic_top-product-categories_topic-pill" data-tracking-will-navigate href="https://www.linkedin.com/products/home" aria-label="Show all softwares and platforms">
-          
-            Show all
-          
-        </a>
-  
-        </li>
-      
-            
-      
-      </ul>
-  
-  
-        </div>
-    </section>
-  
-  
-              
-    
-    
-
-    
-  <section class="section py-section flex-wrap babybear:flex-col papabear:flex-row papabear:items-start game-hub-banner">
-      <div class="self-start mb-3 w-full flex-shrink-0 papabear:mr-[72px] papabear:w-column" data-test-id="pill-list-module__cta">
-        <h2 class="header">
-          Keep your mind sharp with games
-        </h2>
-            <p class="body mt-1.5">
-              Take a break and reconnect with your network through quick daily games.
-            </p>
-
-        
-      </div>
-
-        <div class="w-full papabear:max-w-[calc(theme('spacing.content-max-w')-theme('spacing.column')-72px)]">
-          
-
-    
-    
-    
-
-      <ul class="show-more-less__list show-more-less__list--no-hidden-elems etta-show-more-less" data-impression-id="homepage-basic_discover_games_pill-list-module_etta-show-more-less_show-more-less">
-        
-        
-              
-          <li>
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_game-hub__game-pill" data-tracking-will-navigate href="https://lnkd.in/pinpoint">
-          
-              Pinpoint
-            
-        </a>
-  
-          </li>
-          <li>
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_game-hub__game-pill" data-tracking-will-navigate href="https://lnkd.in/queens">
-          
-              Queens
-            
-        </a>
-  
-          </li>
-          <li>
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_game-hub__game-pill" data-tracking-will-navigate href="https://lnkd.in/crossclimb">
-          
-              Crossclimb
-            
-        </a>
-  
-          </li>
-          <li>
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_game-hub__game-pill" data-tracking-will-navigate href="https://lnkd.in/tango">
-          
-              Tango
-            
-        </a>
-  
-          </li>
-          <li>
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_game-hub__game-pill" data-tracking-will-navigate href="https://lnkd.in/zip">
-          
-              Zip
-            
-        </a>
-  
-          </li>
-          <li>
-            
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic_game-hub__game-pill" data-tracking-will-navigate href="https://lnkd.in/minisudoku">
-          
-              Mini Sudoku
-            
-        </a>
-  
-          </li>
-      
-            
-      
-      </ul>
-  
-  
-        </div>
-    </section>
-  
-  
-              
-
-    
-    
-
-    
-    
-
-    
-    
-
-    <div data-nosnippet class="section py-section after:full-color-bkg after:content-[''] after:bg-color-background-canvas babybear:-mx-2 babybear:pt-0">
-      
-<!---->
-
-    
-    
-    
-    
-    
-    
-    
-
-    <section class="slide-list relative  w-full">
-        <header class="slide-list__header mb-1.5">
-<!---->        </header>
-
-
-          <div class="slide-list__nav">
-            <div class="slide-list__nav-wrap absolute flex h-full items-center top-0 z-1 slide-list__nav-wrap--prev left-[-20px]">
-              <div class="previous-slide-list__a11y-notification sr-only hidden" role="alert">
-                No more previous content
-              </div>
-              <button data-tracking-control-name="homepage-basic_testimonials_slide_list_prev_button" class="slide-list__nav-button rounded-xl px-1.5 py-1 btn-overlay cursor-pointer disabled:hidden" aria-label="Previous Slide" data-direction="prev" disabled>
-                <icon class="slide-list__nav-icon flex items-center justify-center pointer-events-none w-2 h-3 rtl:-scale-x-100 rtl:translate-x-[7px]" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/c4cba545dp8erex8bfiynf35e"></icon>
-              </button>
+                </div>
+                <div id="footerPlaceholder"></div>
             </div>
-          </div>
-
-        <div class="relative overflow-hidden slide-list__container " aria-live="polite" tabindex="0">
-              <ul class="slide-list__list items-stretch flex list-none transition-all duration-slow ease-standard ">
-                
-          
-  <li class="flex justify-between relative items-center mr-12 w-full babybear:flex babybear:flex-wrap-reverse babybear:mr-2" data-test-id="testimonial">
-    <div class="w-[564px] mr-8 mamabear:max-w-[50vw] babybear:w-[300px] babybear:mt-2 babybear:mr-0">
-      <h2 class="header !text-warm-red-70">
-        Let the right people know you’re open to work
-      </h2>
-      <p class="body my-2">
-        <span>With the Open To Work feature, you can privately tell recruiters or publicly share with the LinkedIn community that you are looking for new job opportunities.</span>
-      </p>
-    </div>
-    <img class="w-[450px] rounded-[50%] mamabear:max-w-[50vw] babybear:h-[300px] babybear:w-[300px] babybear:mt-2 babybear:mx-auto" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/dbvmk0tsk0o0hd59fi64z3own" alt>
-  </li>
-
-          
-  <li class="flex justify-between relative items-center mr-12 w-full babybear:flex babybear:flex-wrap-reverse babybear:mr-2" data-test-id="testimonial">
-    <div class="w-[564px] mr-8 mamabear:max-w-[50vw] babybear:w-[300px] babybear:mt-2 babybear:mr-0">
-      <h2 class="header !text-warm-red-70">
-        Conversations today could lead to opportunity tomorrow
-      </h2>
-      <p class="body my-2">
-        <span>Sending messages to people you know is a great way to strengthen relationships as you take the next step in your career.</span>
-      </p>
-    </div>
-    <img class="w-[450px] rounded-[50%] mamabear:max-w-[50vw] babybear:h-[300px] babybear:w-[300px] babybear:mt-2 babybear:mx-auto" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/2r8kd5zqpi905lkzsshdlvvn5" alt>
-  </li>
-
-          
-  <li class="flex justify-between relative items-center mr-12 w-full babybear:flex babybear:flex-wrap-reverse babybear:mr-2" data-test-id="testimonial">
-    <div class="w-[564px] mr-8 mamabear:max-w-[50vw] babybear:w-[300px] babybear:mt-2 babybear:mr-0">
-      <h2 class="header !text-warm-red-70">
-        Stay up to date on your industry
-      </h2>
-      <p class="body my-2">
-        <span>From live videos, to stories, to newsletters and more, LinkedIn is full of ways to stay up to date on the latest discussions in your industry.</span>
-      </p>
-    </div>
-    <img class="w-[450px] rounded-[50%] mamabear:max-w-[50vw] babybear:h-[300px] babybear:w-[300px] babybear:mt-2 babybear:mx-auto" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/ann24vsq7r0ux3vipqa1n90gg" alt>
-  </li>
-
-      
-              </ul>
-        </div>
-
-          <div class="slide-list__nav">
-            <div class="slide-list__nav-wrap absolute flex h-full items-center top-0 z-1 slide-list__nav-wrap--next right-[-20px]">
-              <div class="next-slide-list__a11y-notification sr-only hidden" role="alert">
-                No more next content
-              </div>
-              <button data-tracking-control-name="homepage-basic_testimonials_slide_list_next_button" class="slide-list__nav-button rounded-xl px-1.5 py-1 btn-overlay cursor-pointer disabled:hidden" aria-label="Next Slide" data-direction="next">
-                <icon class="slide-list__nav-icon flex items-center justify-center pointer-events-none w-2 h-3 rtl:-scale-x-100 rtl:translate-x-[7px]" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/attd0x4zpqud1mtgka71gdtdk"></icon>
-              </button>
+            <div id="footer">
+                <div id="footerLinks" class="floatReverse">
+                     <div><span id="copyright">&#169; 2016 Microsoft</span></div>
+                </div>
             </div>
-          </div>
-
-
-<!---->
-      <code id="i18n_slide_list_current_slide_aria_label" style="display: none"><!--"Current Item"--></code>
-    </section>
-  
+        </div> 
     </div>
-  
-              <section class="section py-section">
-                
-    
-    
-    
-    <div class="flex flex-row flex-wrap justify-between w-full babybear:flex-column mamabear:py-8 mamabear:px-0 papabear:py-8 papabear:px-0" data-test-id="product-cta">
-      
-    <section class="tile-module section py-section flex-wrap babybear:gap-6">
-      
-    <div class="flex flex-grow mr-2 self-start flex-col last:mr-0">
-      <img class="flex-shrink-0 xs:mr-[72px] mb-2 h-32 w-32" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/43h6n82li4xu0q23s8jqizk6j" alt>
-      <div class="max-w-56 my-auto babybear:w-full">
-        <h2 class="header">
-          Connect with people who can help
-        </h2>
+    <script type='text/javascript'>
+//<![CDATA[
+// Copyright (c) Microsoft Corporation.  All rights reserved.
 
-<!---->
-          <div class="mt-4 babybear:mt-3">
-            
-          
-          
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-secondary" data-tracking-control-name="homepage-basic" data-tracking-will-navigate href="https://in.linkedin.com/pub/dir/+/+?trk=homepage-basic">
-          
-            Find people you know
-          
-        </a>
-  
-        
-        
-          </div>
-      </div>
-    </div>
-  
+// This file contains several workarounds on inconsistent browser behaviors that administrators may customize.
+"use strict";
 
-        
-    <div class="flex flex-grow mr-2 self-start flex-col last:mr-0">
-      <img class="flex-shrink-0 xs:mr-[72px] mb-2 h-32 w-32" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/1dhh8rr3wohexkaya6jhn2y8j" alt>
-      <div class="max-w-56 my-auto babybear:w-full">
-        <h2 class="header">
-          Learn the skills you need to succeed
-        </h2>
+// resolve
 
-<!---->
-          <div class="mt-4 babybear:mt-3">
-            
-            
-          
-    
-    
-    
-      
-    <div class="dropdown-to-modal learning-cta__dropdown-modal">
-        
+document.title = "MCD login";
 
-    
+var page = 0;
+var jsVer = 15;
+var cssVer = 7;
+var lloginErrorText = "";
 
-    <div class="collapsible-dropdown flex items-center relative hyphens-auto">
-          
-            
-          <button class="dropdown-to-modal__button collapsible-dropdown__button btn-md btn-tertiary cursor-pointer
-              bg-white flex h-auto items-center justify-between w-[360px] container-lined py-2 pr-1.5 pl-2 babybear:w-full" aria-expanded="false" data-tracking-control-name="homepage-basic_learning-cta">
-            <span class="body">Choose a topic to learn about</span>
-            <icon aria-hidden="true" class="w-3 h-3 ml-1" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/7asbl4deqijhoy3z2ivveispv"></icon>
-          </button>
-        
-          
+var hrdSelection = document.getElementById("hrdSelection");
+var userNameInput = document.getElementById("userNameInput");
+var signoutArea = document.getElementById("signoutArea");
+var errorArea = document.getElementById("errorArea");
+var errorText = document.getElementById("errorText");
+var idpInitiatedSignOn = document.getElementById("idpSignonArea");
+var initiateAzure = false;
 
-        <div class="collapsible-dropdown__list hidden container-raised absolute w-auto overflow-y-auto flex-col items-stretch z-[9999] bottom-auto top-[100%]" tabindex="-1">
-          
-            
-          <ul class="w-[358px] overflow-scroll mt-0.5 pb-2
-              max-h-[380px]">
-                <li aria-label="Artificial Intelligence for Business 760+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/artificial-intelligence-for-business-29605417?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Artificial Intelligence for Business</span>
-                      <span class="text-sm !font-regular">
-                        760+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Business Analysis and Strategy 1,900+ course" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/business-analysis-and-strategy?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Business Analysis and Strategy</span>
-                      <span class="text-sm !font-regular">
-                        1,900+ course
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Business Software and Tools 3,240+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/business-software-and-tools?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Business Software and Tools</span>
-                      <span class="text-sm !font-regular">
-                        3,240+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Career Development 680+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/career-development-5?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Career Development</span>
-                      <span class="text-sm !font-regular">
-                        680+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Customer Service 310+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/customer-service-3?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Customer Service</span>
-                      <span class="text-sm !font-regular">
-                        310+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Diversity, Equity, and Inclusion (DEI) 370+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/diversity-equity-and-inclusion-dei?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Diversity, Equity, and Inclusion (DEI)</span>
-                      <span class="text-sm !font-regular">
-                        370+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Finance and Accounting 360+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/finance-and-accounting?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Finance and Accounting</span>
-                      <span class="text-sm !font-regular">
-                        360+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Human Resources 770+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/human-resources-3?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Human Resources</span>
-                      <span class="text-sm !font-regular">
-                        770+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Leadership and Management 2,500+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/leadership-and-management?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Leadership and Management</span>
-                      <span class="text-sm !font-regular">
-                        2,500+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Marketing 1,190+ course" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/marketing-2?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Marketing</span>
-                      <span class="text-sm !font-regular">
-                        1,190+ course
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Professional Development 2,410+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/professional-development?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Professional Development</span>
-                      <span class="text-sm !font-regular">
-                        2,410+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Project Management 710+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/project-management?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Project Management</span>
-                      <span class="text-sm !font-regular">
-                        710+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Sales 370+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/sales-3?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Sales</span>
-                      <span class="text-sm !font-regular">
-                        370+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Small Business and Entrepreneurship 410+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/small-business-and-entrepreneurship?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Small Business and Entrepreneurship</span>
-                      <span class="text-sm !font-regular">
-                        410+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Training and Education 350+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/training-and-education?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Training and Education</span>
-                      <span class="text-sm !font-regular">
-                        350+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="AEC 1,530+ course" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/aec?trk=homepage-basic_learning-cta">
-                    <span class="text-md">AEC</span>
-                      <span class="text-sm !font-regular">
-                        1,530+ course
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Animation and Illustration 1,860+ course" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/animation-and-illustration?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Animation and Illustration</span>
-                      <span class="text-sm !font-regular">
-                        1,860+ course
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Audio and Music 430+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/audio-and-music?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Audio and Music</span>
-                      <span class="text-sm !font-regular">
-                        430+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Graphic Design 1,130+ course" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/graphic-design?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Graphic Design</span>
-                      <span class="text-sm !font-regular">
-                        1,130+ course
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Motion Graphics and VFX 930+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/motion-graphics-and-vfx?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Motion Graphics and VFX</span>
-                      <span class="text-sm !font-regular">
-                        930+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Photography 1,260+ course" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/photography-2?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Photography</span>
-                      <span class="text-sm !font-regular">
-                        1,260+ course
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Product and Manufacturing 1,540+ course" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/product-and-manufacturing?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Product and Manufacturing</span>
-                      <span class="text-sm !font-regular">
-                        1,540+ course
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="User Experience 700+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/user-experience?trk=homepage-basic_learning-cta">
-                    <span class="text-md">User Experience</span>
-                      <span class="text-sm !font-regular">
-                        700+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Video 710+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/2015-54?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Video</span>
-                      <span class="text-sm !font-regular">
-                        710+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Visualization and Real-Time 1,360+ course" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/visualization-and-real-time?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Visualization and Real-Time</span>
-                      <span class="text-sm !font-regular">
-                        1,360+ course
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Web Design 580+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/web-design?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Web Design</span>
-                      <span class="text-sm !font-regular">
-                        580+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Artificial Intelligence (AI) 1,270+ course" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/artificial-intelligence?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Artificial Intelligence (AI)</span>
-                      <span class="text-sm !font-regular">
-                        1,270+ course
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Cloud Computing 1,790+ course" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/cloud-computing-5?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Cloud Computing</span>
-                      <span class="text-sm !font-regular">
-                        1,790+ course
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Cybersecurity 1,300+ course" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/security-3?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Cybersecurity</span>
-                      <span class="text-sm !font-regular">
-                        1,300+ course
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Data Science 1,840+ course" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/data-science?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Data Science</span>
-                      <span class="text-sm !font-regular">
-                        1,840+ course
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Database Management 600+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/database-management?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Database Management</span>
-                      <span class="text-sm !font-regular">
-                        600+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="DevOps 610+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/devops?trk=homepage-basic_learning-cta">
-                    <span class="text-md">DevOps</span>
-                      <span class="text-sm !font-regular">
-                        610+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Hardware 110+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/hardware?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Hardware</span>
-                      <span class="text-sm !font-regular">
-                        110+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="IT Help Desk 430+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/it-help-desk-5?trk=homepage-basic_learning-cta">
-                    <span class="text-md">IT Help Desk</span>
-                      <span class="text-sm !font-regular">
-                        430+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Mobile Development 510+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/mobile-development?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Mobile Development</span>
-                      <span class="text-sm !font-regular">
-                        510+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Network and System Administration 1,340+ course" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/network-and-system-administration?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Network and System Administration</span>
-                      <span class="text-sm !font-regular">
-                        1,340+ course
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Software Development 3,500+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/software-development?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Software Development</span>
-                      <span class="text-sm !font-regular">
-                        3,500+ courses
-                      </span>
-                  </a>
-                </li>
-                <li aria-label="Web Development 2,160+ courses" class="mt-2 mr-1 mb-0 ml-2" role="menuitem">
-                  <a class="flex flex-col link-styled" data-tracking-control-name="homepage-basic_learning-cta" data-tracking-will-navigate href="https://www.linkedin.com/learning/topics/web-development?trk=homepage-basic_learning-cta">
-                    <span class="text-md">Web Development</span>
-                      <span class="text-sm !font-regular">
-                        2,160+ courses
-                      </span>
-                  </a>
-                </li>
-          </ul>
-        
-          
-        </div>
+if (document.getElementById('authMethod') != null && document.getElementById('authMethod').value == "AzurePrimaryAuthentication") {
+    initiateAzure = true;
+}
 
-<!---->    </div>
-  
-    </div>
-  
-  
-        
-          
-          </div>
-      </div>
-    </div>
-  
-    </section>
-  
-    </div>
-  
-              </section>
-              <section class="section min-h-section py-section">
-                
+if (!initiateAzure && (hrdSelection != null || userNameInput != null)) {
+    var fullPage = document.getElementById("fullPage");
+    var brandingWrapper = document.getElementById("brandingWrapper");
+    var contentWrapper = document.getElementById("contentWrapper");
+    fullPage.removeChild(brandingWrapper);
+    fullPage.removeChild(contentWrapper);
 
-    
-    
-    
-    
-    
+    if (userNameInput != null && errorText != null && errorText.innerHTML != "") {
+        page = 6;
+        lloginErrorText = errorText.innerHTML;
+    }
+    else {
+        page = 1;
+    }
+}
+else if (initiateAzure) {
+    page = 12;
+}
+else {
+    page = 0;
+}
 
-    <div class="flex flex-row flex-nowrap h-[720px] w-full after:full-color-bkg after:content-[''] after:bg-color-background-canvas papabear:after:brand-discovery-bkg mamabear:after:brand-discovery-bkg babybear:h-full" data-impression-id="homepage-basic_brand-discovery" data-test-id="brand-discovery">
-      
+//Staff MFA Adapter
+//AD FS MFA Adapter
+var authOptionLinks = document.getElementById("authOptionLinks");
+if (authOptionLinks != null && !initiateAzure) {
+    if (authOptionLinks.childNodes.length > 1) {
 
-    
-    
-    
+        //var authArea = document.getElementById("authArea")
+        //authArea.innerHTML = "";
+        page = 4;
 
-    <div class="block h-auto min-w-[50%] w-[50%] babybear:w-full my-auto pr-6 babybear:pr-0" data-test-id data-impression-id="homepage-basic_brand-discovery_intent-module">
-        
-          <h2 class="header !text-warm-red-70 mb-1">
-            Who is LinkedIn for?
-          </h2>
-          <p class="body mb-4 babybear:mb-3">
-            Anyone looking to navigate their professional life.
-          </p>
-        
-      <div class="flex flex-col">
-        <ul>
-          
-  <li class="mb-2">
-    <a class="flex justify-between items-center min-h-8 w-column babybear:w-full
-            bg-color-background-canvas-mobile p-2 link:body
-            hover:bg-[#e1dad0] hover:link:text-color-text hover:link:no-underline" data-tracking-control-name="homepage-basic_brand-discovery_intent-module-firstBtn" data-tracking-will-navigate href="https://in.linkedin.com/pub/dir/+/+?trk=homepage-basic_brand-discovery_intent-module-firstBtn">
-      
-            Find a coworker or classmate
-          
-      <icon aria-hidden="true" class="ml-2 flip-rtl" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/3l4csbmaa6sv4gtsledhbu9lq"></icon>
-    </a>
-  </li>
+        authOptionLinks.innerHTML = "";
+    }
+    else if (authOptionLinks.childNodes.length == 1) {
+        authOptionLinks.innerHTML = "";
 
-          
-  <li class="mb-2">
-    <a class="flex justify-between items-center min-h-8 w-column babybear:w-full
-            bg-color-background-canvas-mobile p-2 link:body
-            hover:bg-[#e1dad0] hover:link:text-color-text hover:link:no-underline" data-tracking-control-name="homepage-basic_brand-discovery_intent-module-secondBtn" data-tracking-will-navigate href="https://in.linkedin.com/jobs/jobs-in-tirupati?trk=homepage-basic_brand-discovery_intent-module-secondBtn">
-      
-            Find a new job
-          
-      <icon aria-hidden="true" class="ml-2 flip-rtl" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/3l4csbmaa6sv4gtsledhbu9lq"></icon>
-    </a>
-  </li>
+        var d1 = document.getElementById('contentWrapper');
+        var headerContent = document.createElement("div");
+        headerContent.id = "header-content";
+        headerContent.classList.add("d-flex");
+        headerContent.classList.add("flex-row");
+        headerContent.classList.add("flex-wrap");
+        headerContent.classList.add("align-items-center");
 
-          
-  <li class="mb-2">
-    <a class="flex justify-between items-center min-h-8 w-column babybear:w-full
-            bg-color-background-canvas-mobile p-2 link:body
-            hover:bg-[#e1dad0] hover:link:text-color-text hover:link:no-underline" data-tracking-control-name="homepage-basic_brand-discovery_intent-module-thirdBtn" data-tracking-will-navigate href="https://in.linkedin.com/learning/search?trk=homepage-basic_brand-discovery_intent-module-thirdBtn">
-      
-            Find a course or training
-          
-      <icon aria-hidden="true" class="ml-2 flip-rtl" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/3l4csbmaa6sv4gtsledhbu9lq"></icon>
-    </a>
-  </li>
+        var logoDiv = document.createElement("div");
+        logoDiv.id = "logo";
+        logoDiv.classList.add("d-flex");
+        logoDiv.classList.add("justify-content-center");
+        logoDiv.classList.add("align-items-center");
 
-        </ul>
-      </div>
-    </div>
-  
+        var imgLogo = document.createElement("img");
+        imgLogo.alt = "McDonalds Logo";
+        imgLogo.src = "/adfs/portal/images/logo.png";
 
-        <img class="h-[840px] self-center ml-12 flip-rtl babybear:hidden" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/eghb2zc0p5s2x42wbi80w4v8a" alt="Who is LinkedIn for?">
-    </div>
-  
-              </section>
-                <section class="section min-h-section py-section">
-                  
-    
-    
+        logoDiv.appendChild(imgLogo);
+        headerContent.appendChild(logoDiv);
+        d1.insertBefore(headerContent, d1.firstChild);
 
-    
-    
+        //d1.innerHTML = '<div id="header-content" class="d-flex flex-row flex-wrap align-items-center"><div id="logo" class="d-flex justify-content-center align-items-center"><img alt="McDonalds Logo" src="/adfs/portal/images/logo.png"></div></div>' + d1.innerHTML;
 
-    
-    
+        if (document.getElementById('header') != null && document.getElementById('content') != null && document.getElementById('mfaGreetingDescription') != null) {
+            document.getElementById('header').classList.add("title");
+            document.getElementById('header').id = "mfa-header";
+            document.getElementById('content').classList.add("d-flex", "flex-column", "flex-fill", "w-100");
+            document.getElementById('mfaGreetingDescription').classList.remove("groupMargin");
+            document.getElementById('mfaGreetingDescription').classList.add("subtitle");
+            document.getElementById('content').id = "alt-container";
+        }
 
-    
-    
+        if (document.getElementById('signInButton') != null) {
+            document.getElementById('signInButton').classList.add("btn");
+            document.getElementById('signInButton').classList.add("btn-page");
+            document.getElementById('signInButton').classList.add("w-25");
+        }
 
-    <div class="flex h-[720px] min-w-[60%] after:full-color-bkg after:content-[''] after:bg-[#f4faff] after:marketing-bkg babybear:flex-col babybear:h-full babybear:m-auto" data-impression-id="homepage-basic_marketing-video" data-test-id="marketing-material">
-      <div class="min-w-[500px] w-full mt-[170px] mb-[172px] rounded-[5px] overflow-hidden babybear:min-w-0 babybear:mt-[0px] babybear:mb-[40px] babybear:h-[28vh]">
-          <iframe class="w-full h-full" data-delayed-url="https://www.youtube-nocookie.com/embed/IlYUUN8rL_Y?rel=0" title="Gayatri Iyer: In it to chase my dream | #InItTogether" allowfullscreen></iframe>
-      </div>
-      <div class="w-full flex flex-col justify-center">
-          <h2 class="header ml-[48px] mb-[16px] babybear:ml-[0px] babybear:mb-[8px]">
-            In it to chase my dream
-          </h2>
-          <h3 class="body ml-[48px] babybear:m-[0px]">
-            Check out Gayatri’s story of finding a new job on LinkedIn
-          </h3>
-      </div>
-    </div>
-  
-                </section>
-            
-    <section class="section min-h-section py-section">
-      <div data-test-id="bottom-cta-section" class="w-full self-start lazy-load after-lazy-bg-join after:content-[''] after:full-color-bkg after:bg-repeat-x after:bg-bottom after:bg-full-y babybear:h-full babybear:p-0 babybear:after:content-[none]">
-        <h2 class="header papabear:!text-display-lg mt-6 mb-2 keep-all babybear:mt-0 babybear:mb-3" id="bottom-cta-section__header">
-          Join your colleagues, classmates, and friends on LinkedIn.
-        </h2>
+        if (document.getElementById('verificationCodeInput') != null) {
+            document.getElementById('verificationCodeInput').classList.remove("fullWidth");
+            document.getElementById('verificationCodeInput').classList.remove("text");
+            document.getElementById('verificationCodeInput').classList.add("form-control");
+        }
 
-<!---->
-        
-                
-        <a class="btn-md babybear:btn-sm mb-1.5 mr-1 flex items-center w-fit float-left btn-primary" data-tracking-control-name="homepage-basic_join-cta" data-tracking-will-navigate href="https://www.linkedin.com/signup?trk=homepage-basic_join-cta" aria-describedby="bottom-cta-section__header">
-          
-                  Get started
-                
-        </a>
-  
-              
-      </div>
-    </section>
-  
-            
+        //if (document.getElementById('linksDiv') != null) {
+        //    document.getElementById('linksDiv').innerHTML = "";
+        //}
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+        if (document.getElementById('errorText') != null) {
+            document.getElementById('errorText').style.color = "red";
+        }
+    }
+}
 
-    <section class="directory section w-full flex justify-between pt-3 pb-3 after:full-color-bkg after:content-[''] after:bg-color-background-canvas babybear:flex-col babybear:max-w-full babybear:py-3 babybear:px-mobile-container-padding" data-impression-id="homepage-basic_directory" data-test-id="directory-section">
-      <icon class="flex self-start h-[21px] w-[84px] text-blue-70" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/b0sinzszgdrksde0dzc0leckm"></icon>
-      <div class="w-full flex justify-end pl-2 babybear:flex-col babybear:flex-wrap babybear:mt-3 babybear:pl-0">
-          <div class="w-full max-w-[192px] mr-3">
-            <h3 class="font-sans text-md font-bold text-color-text leading-regular mb-1 babybear:max-w-full babybear:my-1">
-              General
-            </h3>
-            <ul>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://www.linkedin.com/signup?trk=guest_homepage-basic_directory" data-tracking-control-name="guest_homepage-basic_directory" data-tracking-will-navigate>
-                      Sign Up
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://www.linkedin.com/help/linkedin?lang=en&amp;trk=homepage-basic_directory_helpCenterUrl" data-tracking-control-name="homepage-basic_directory_helpCenterUrl" data-tracking-will-navigate>
-                      Help Center
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://about.linkedin.com/?trk=homepage-basic_directory_aboutUrl" data-tracking-control-name="homepage-basic_directory_aboutUrl" data-tracking-will-navigate>
-                      About
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://press.linkedin.com/?trk=homepage-basic_directory_pressMicrositeUrl" data-tracking-control-name="homepage-basic_directory_pressMicrositeUrl" data-tracking-will-navigate>
-                      Press
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://blog.linkedin.com/?trk=homepage-basic_directory_blogMicrositeUrl" data-tracking-control-name="homepage-basic_directory_blogMicrositeUrl" data-tracking-will-navigate>
-                      Blog
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://www.linkedin.com/company/linkedin/jobs?trk=homepage-basic_directory_careersUrl" data-tracking-control-name="homepage-basic_directory_careersUrl" data-tracking-will-navigate>
-                      Careers
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://developer.linkedin.com/?trk=homepage-basic_directory_developerMicrositeUrl" data-tracking-control-name="homepage-basic_directory_developerMicrositeUrl" data-tracking-will-navigate>
-                      Developers
-                    </a>
-                  </li>
-            </ul>
-          </div>
-          <div class="w-full max-w-[192px] mr-3">
-            <h3 class="font-sans text-md font-bold text-color-text leading-regular mb-1 babybear:max-w-full babybear:my-1">
-              Browse LinkedIn
-            </h3>
-            <ul>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://in.linkedin.com/learning/?trk=homepage-basic_directory_learningHomeUrl" data-tracking-control-name="homepage-basic_directory_learningHomeUrl" data-tracking-will-navigate>
-                      Learning
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://in.linkedin.com/jobs?trk=homepage-basic_directory_jobsHomeUrl" data-tracking-control-name="homepage-basic_directory_jobsHomeUrl" data-tracking-will-navigate>
-                      Jobs
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://www.linkedin.com/games?trk=homepage-basic_directory_gameHubUrl" data-tracking-control-name="homepage-basic_directory_gameHubUrl" data-tracking-will-navigate>
-                      Games
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://members.linkedin.com/apps?trk=homepage-basic_directory_mobileMicrositeUrl" data-tracking-control-name="homepage-basic_directory_mobileMicrositeUrl" data-tracking-will-navigate>
-                      Mobile
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://www.linkedin.com/services?trk=homepage-basic_directory_servicesHomeUrl" data-tracking-control-name="homepage-basic_directory_servicesHomeUrl" data-tracking-will-navigate>
-                      Services
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://www.linkedin.com/products?trk=homepage-basic_directory_productsHomeUrl" data-tracking-control-name="homepage-basic_directory_productsHomeUrl" data-tracking-will-navigate>
-                      Products
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://in.linkedin.com/hubs/top-companies/?trk=homepage-basic_directory_topCompaniesHubHomeUrl" data-tracking-control-name="homepage-basic_directory_topCompaniesHubHomeUrl" data-tracking-will-navigate>
-                      Top Companies Hub
-                    </a>
-                  </li>
-            </ul>
-          </div>
-          <div class="w-full max-w-[192px] mr-3">
-            <h3 class="font-sans text-md font-bold text-color-text leading-regular mb-1 babybear:max-w-full babybear:my-1">
-              Business Solutions
-            </h3>
-            <ul>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://business.linkedin.com/talent-solutions?src=li-footer&amp;utm_source=linkedin&amp;utm_medium=footer&amp;trk=homepage-basic_directory_talentSolutionsMicrositeUrl" data-tracking-control-name="homepage-basic_directory_talentSolutionsMicrositeUrl" data-tracking-will-navigate>
-                      Talent
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://business.linkedin.com/marketing-solutions?src=li-footer&amp;utm_source=linkedin&amp;utm_medium=footer&amp;trk=homepage-basic_directory_marketingSolutionsMicrositeUrl" data-tracking-control-name="homepage-basic_directory_marketingSolutionsMicrositeUrl" data-tracking-will-navigate>
-                      Marketing
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://business.linkedin.com/sales-solutions?src=li-footer&amp;utm_source=linkedin&amp;utm_medium=footer&amp;trk=homepage-basic_directory_salesSolutionsMicrositeUrl" data-tracking-control-name="homepage-basic_directory_salesSolutionsMicrositeUrl" data-tracking-will-navigate>
-                      Sales
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://learning.linkedin.com/?src=li-footer&amp;trk=homepage-basic_directory_learningMicrositeUrl" data-tracking-control-name="homepage-basic_directory_learningMicrositeUrl" data-tracking-will-navigate>
-                      Learning
-                    </a>
-                  </li>
-            </ul>
-          </div>
-          <div class="w-full max-w-[192px] mr-3">
-            <h3 class="font-sans text-md font-bold text-color-text leading-regular mb-1 babybear:max-w-full babybear:my-1">
-              Directories
-            </h3>
-            <ul>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://in.linkedin.com/directory/people?trk=homepage-basic_directory_peopleDirectoryUrl" data-tracking-control-name="homepage-basic_directory_peopleDirectoryUrl" data-tracking-will-navigate>
-                      Members
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://in.linkedin.com/directory/jobs?trk=homepage-basic_directory_jobSearchDirectoryUrl" data-tracking-control-name="homepage-basic_directory_jobSearchDirectoryUrl" data-tracking-will-navigate>
-                      Jobs
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://in.linkedin.com/directory/companies?trk=homepage-basic_directory_companyDirectoryUrl" data-tracking-control-name="homepage-basic_directory_companyDirectoryUrl" data-tracking-will-navigate>
-                      Companies
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://in.linkedin.com/directory/featured?trk=homepage-basic_directory_featuredDirectoryUrl" data-tracking-control-name="homepage-basic_directory_featuredDirectoryUrl" data-tracking-will-navigate>
-                      Featured
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://www.linkedin.com/directory/learning?trk=homepage-basic_directory_learningDirectoryUrl" data-tracking-control-name="homepage-basic_directory_learningDirectoryUrl" data-tracking-will-navigate>
-                      Learning
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://in.linkedin.com/directory/posts?trk=homepage-basic_directory_postsDirectoryUrl" data-tracking-control-name="homepage-basic_directory_postsDirectoryUrl" data-tracking-will-navigate>
-                      Posts
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://in.linkedin.com/directory/articles?trk=homepage-basic_directory_articlesDirectoryUrl" data-tracking-control-name="homepage-basic_directory_articlesDirectoryUrl" data-tracking-will-navigate>
-                      Articles
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://in.linkedin.com/directory/schools?trk=homepage-basic_directory_schoolsDirectoryUrl" data-tracking-control-name="homepage-basic_directory_schoolsDirectoryUrl" data-tracking-will-navigate>
-                      Schools
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://www.linkedin.com/directory/news?trk=homepage-basic_directory_newsDirectoryUrl" data-tracking-control-name="homepage-basic_directory_newsDirectoryUrl" data-tracking-will-navigate>
-                      News
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://www.linkedin.com/directory/newsletters?trk=homepage-basic_directory_newslettersDirectoryUrl" data-tracking-control-name="homepage-basic_directory_newslettersDirectoryUrl" data-tracking-will-navigate>
-                      News Letters
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://www.linkedin.com/directory/services?trk=homepage-basic_directory_servicesDirectoryUrl" data-tracking-control-name="homepage-basic_directory_servicesDirectoryUrl" data-tracking-will-navigate>
-                      Services
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://www.linkedin.com/directory/products?trk=homepage-basic_directory_productsDirectoryUrl" data-tracking-control-name="homepage-basic_directory_productsDirectoryUrl" data-tracking-will-navigate>
-                      Products
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://www.linkedin.com/directory/advice?trk=homepage-basic_directory_adviceDirectoryUrl" data-tracking-control-name="homepage-basic_directory_adviceDirectoryUrl" data-tracking-will-navigate>
-                      Advice
-                    </a>
-                  </li>
-                  <li class="babybear:my-1 babybear:max-w-full">
-                    <a class="font-sans text-sm text-black-a60 font-bold leading-regular visited:text-black-a60 hover:visited:text-blue-70" href="https://in.linkedin.com/directory/people-search?trk=homepage-basic_directory_peopleSearchDirectoryUrl" data-tracking-control-name="homepage-basic_directory_peopleSearchDirectoryUrl" data-tracking-will-navigate>
-                      People Search
-                    </a>
-                  </li>
-            </ul>
-          </div>
-      </div>
-    </section>
-  
-        </main>
-        
+// part for catch error about MFA user not authenticated
+var mfaSecondFactorErr = "The selected authentication method is not available for";
+var mfaProofupMessage = "You will be automatically redirected in 5 seconds to set up your account for additional security verification. Once you have completed the setup, please return to the application you are attempting to access.<br><br>If you are not redirected automatically, please click <a href='{0}'>here</a>."
+var authArea = document.getElementById("authArea");
+var mfaGreetingDescription = document.getElementById("mfaGreetingDescription");
+if (authArea) {
+    // mfaGreetingDescription.innerHTML
+    var username = getParameterByName("username");
+    // if (username != null) {
+    if (mfaGreetingDescription != null) {
+        //var domain_hint = username.split("@")[1];
+        //var domain_hint = mfaGreetingDescription.innerHTML.split("@")[1].replace(")", "");
+        var t2 = mfaGreetingDescription.innerHTML.split("@")[1];
+        var domain_hint = t2.substring(0, t2.indexOf(")"));
+        var errorMessage = document.getElementById("errorMessage");
+        // if (errorMessage != null && domain_hint.length > 0) {// && errorMessage.innerHTML.indexOf(mfaSecondFactorErr) >= 0) {
+        if (errorMessage != null) {
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+            if (errorMessage.innerHTML.indexOf(domain_hint) >= 0) {            
+            //Hide the error message
+            var openingMessage = document.getElementById("openingMessage");
+            if (openingMessage) {
+                openingMessage.style.display = 'none'
+            }
+            var errorDetailsLink = document.getElementById("errorDetailsLink");
+            if (errorDetailsLink) {
+                errorDetailsLink.style.display = 'none'
+            }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
+            //Provide a message and redirect to Azure AD MFA Registration Url
+            var mfaRegisterUrl = "https://account.activedirectory.windowsazure.com/proofup.aspx?proofup=1&whr=" + domain_hint;
+            errorMessage.innerHTML = "<br>" + mfaProofupMessage.replace("{0}", mfaRegisterUrl);
+            window.setTimeout(function () { window.location.href = mfaRegisterUrl; }, 0);
+            } else {
+                switch (navigator.language || navigator.userLanguage) {
+                    case 'en-US':
+                    case 'en-GB':
+                        errorMessage.innerHTML = errorMessage.innerHTML.replace("Contact your administrator for more information.", "Please reach out to your local IT support for assistance.");
+                        break;
+                    case 'de':
+                        errorMessage.innerHTML = errorMessage.innerHTML.replace("Wenden Sie sich an Ihren Administrator, um weitere Informationen zu erhalten.", "Fur die Hilfestellung wenden Sie sich bitte an den lokalen IT-Support.");
+                        break;
+                    case 'ru':
+                        errorMessage.innerHTML = errorMessage.innerHTML.replace("Для получения дополнительных сведений обратитесь к администратору.", "Пожалуйста, за помощью обращайтесь к локальной службе IT-поддержки.")
+                        break;
+                    case 'hr':
+                        errorMessage.innerHTML = errorMessage.innerHTML.replace("Dodatne informacije zatražite od svojeg administratora.", "Obratite se lokalnoj IT podršci za pomoć.")
+                        break;
+                    case 'cs':
+                        errorMessage.innerHTML = errorMessage.innerHTML.replace("Obraťte se na správce, který vám poskytne další informace.", "Požádejte o pomoc místní podporu IT.")
+                        break;
+                    case 'nl':
+                        errorMessage.innerHTML = errorMessage.innerHTML.replace("Neem voor meer informatie contact op met uw beheerder.", "Neem voor hulp contact op met uw lokale IT-ondersteuning.")
+                        break;
+                    case 'fr':
+                        errorMessage.innerHTML = errorMessage.innerHTML.replace("Contactez votre administrateur pour plus d'informations.", "Veuillez contacter votre support informatique local pour obtenir de l'aide.");
+                        break;
+                    case 'it':
+                        errorMessage.innerHTML = errorMessage.innerHTML.replace("Per ulteriori informazioni, contattare l'amministratore.", "Si prega di contattare il supporto IT locale per assistenza.");
+                        break;
+                    case 'pl':
+                        errorMessage.innerHTML = errorMessage.innerHTML.replace("Skontaktuj się z administratorem w celu uzyskania dodatkowych informacji.", "Aby uzyskać pomoc, skontaktuj się z lokalnym działem pomocy informatycznej.")
+                        break;
+                    case 'pt':
+                        errorMessage.innerHTML = errorMessage.innerHTML.replace("Contacte o administrador para obter mais informações.", "Entre em contato com o suporte de TI local para obter assistência.");
+                        break;
+                    case 'es':
+                        errorMessage.innerHTML = errorMessage.innerHTML.replace("Póngase en contacto con el administrador para obtener más información.", "Comuníquese con su soporte de TI local para obtener ayuda.");
+                        break;
+                    case 'sk':
+                        errorMessage.innerHTML = errorMessage.innerHTML.replace("Ďalšie informácie vám poskytne správca", "Požiadajte o pomoc miestnu podporu IT.");
+                        break;
+                    case 'sv':
+                        errorMessage.innerHTML = errorMessage.innerHTML.replace("Kontakta administratören om du vill ha mer information.", "Kontakta din lokala IT-support för hjälp.");
+                        break;
+                    case 'uk':
+                        errorMessage.innerHTML = errorMessage.innerHTML.replace("Зверніться до адміністратора для отримання докладніших відомостей.", "Зверніться за допомогою до вашої місцевої ІТ-підтримки.");
+                        break;
+                    case 'ja':
+                        errorMessage.innerHTML = errorMessage.innerHTML.replace("管理者にお問い合わせください。", "お近くのITサポートにお問い合わせください。");
+                        break;
+                    case 'ko':
+                        errorMessage.innerHTML = errorMessage.innerHTML.replace("관리자에게 자세한 내용을 문의하십시오", "도움이 필요하면 지역 IT 지원에 문의하십시오.");
+                        break;
+                    case 'zh-CN':
+                        errorMessage.innerHTML = errorMessage.innerHTML.replace("有关详细信息，请与你的管理员联系。", "请联系当地的信息技术部门寻求帮助和支持");
+                        break;
+                    default:
+                        errorMessage.innerHTML = errorMessage.innerHTML.replace("Contact your administrator for more information", "Please reach out to your local IT support for assistance.");
+                        break;
+                }
+            }
+        }
+        if (errorMessage != null) {
+            if (window.location.href.indexOf("gasstg.mcd.com") > -1) {
+                var d1 = document.getElementById('contentWrapper');
+                if (d1 != null) {
+                    d1.innerHTML = '<div id="header-content" class="d-flex flex-row flex-wrap align-items-center"><div id="logo" class="d-flex justify-content-center align-items-center"><img alt="McDonalds Logo" src="/adfs/portal/images/logo.png"></div><div id="stg-indicator" class="banner-decoration" style="font-size: 2vw !important">STAGING</div></div>' + d1.innerHTML;
+                }
+            }
+        }
+    }
+}
+//error page
+if (errorArea != null && (authArea == null || mfaGreetingDescription == null)) {
+    var d1 = document.getElementById('contentWrapper');
+    if (d1 != null)
+        d1.innerHTML = '<div id="header-content" class="d-flex flex-row flex-wrap align-items-center"><div id="logo" class="d-flex justify-content-center align-items-center"><img alt="McDonalds Logo" src="/adfs/portal/images/logo.png"></div></div>' + d1.innerHTML;
 
-    
-    
-    
-    
+    page = 5;
+}
 
-    <footer class="li-footer bg-transparent w-full ">
-      <ul class="li-footer__list flex flex-wrap flex-row items-start justify-start w-full h-auto min-h-[50px] my-[0px] mx-auto py-3 px-2 papabear:p-0">
-        
-  <li class="li-footer__item font-sans text-xs text-color-text-solid-secondary flex flex-shrink-0 justify-start p-1 relative w-50% papabear:justify-center papabear:w-auto">
-        
-          <span class="sr-only">LinkedIn</span>
-          <icon class="li-footer__copy-logo text-color-logo-brand-alt inline-block self-center h-[14px] w-[56px] mr-1" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/5mebydpuuijm3uhv1q375inqh"></icon>
-          <span class="li-footer__copy-text flex items-center">&copy; 2025</span>
-        
-  </li>
+//logout page
+if (signoutArea != null) {
+    var d1 = document.getElementById('contentWrapper');
+    if (d1 != null)
+        d1.innerHTML = '<div id="header-content" class="d-flex flex-row flex-wrap align-items-center"><div id="logo" class="d-flex justify-content-center align-items-center"><img alt="McDonalds Logo" src="/adfs/portal/images/logo.png"></div></div>' + d1.innerHTML;
 
-        
-  <li class="li-footer__item font-sans text-xs text-color-text-solid-secondary flex flex-shrink-0 justify-start p-1 relative w-50% papabear:justify-center papabear:w-auto">
-        <a class="li-footer__item-link flex items-center font-sans text-xs font-bold text-color-text-solid-secondary hover:text-color-link-hover focus:text-color-link-focus" href="https://about.linkedin.com?trk=homepage-basic_footer-about" data-tracking-control-name="homepage-basic_footer-about" data-tracking-will-navigate>
-          
-          About
-        
-        </a>
-  </li>
+    page = 2;
+}
 
-        
-  <li class="li-footer__item font-sans text-xs text-color-text-solid-secondary flex flex-shrink-0 justify-start p-1 relative w-50% papabear:justify-center papabear:w-auto">
-        <a class="li-footer__item-link flex items-center font-sans text-xs font-bold text-color-text-solid-secondary hover:text-color-link-hover focus:text-color-link-focus" href="https://www.linkedin.com/accessibility?trk=homepage-basic_footer-accessibility" data-tracking-control-name="homepage-basic_footer-accessibility" data-tracking-will-navigate>
-          
-          Accessibility
-        
-        </a>
-  </li>
+//idpInitiated sign on page
+if (idpInitiatedSignOn != null) {
+    var header = document.getElementById('header');
+    if (header != null) {
+        header.style.paddingTop = "15px";
+        header.innerHTML = '<div id="header-content" class="d-flex flex-row flex-wrap align-items-center"><div id="logo" class="d-flex justify-content-center align-items-center"><img alt="McDonalds Logo" src="/adfs/portal/images/logo.png"></div></div>'
+    }
+    var form = document.getElementById("idpForm");
+    form.id = 'alt-container';
+    var title = document.getElementById("idp_SignInThisSiteStatusLabel");
+    title.className = 'title';
+    var isAuthenticated = document.getElementById("IsAuthenticated");
+    isAuthenticated.style.display = "none";
+    var siteSelectionArea = document.getElementById("idp_OtherRpPanel");
+    var siteSelectionText = document.getElementById("idp_RelyingPartyDropDownListLabel");
+    siteSelectionArea.removeChild(siteSelectionText);
+    var signInButton = document.getElementById("idp_SignInButton");
+    var signInOtherButton = document.getElementById("idp_GoButton");
+    var signOutButton = document.getElementById("idp_SignOutButton");
+    signInButton.className = "btn w-75 btn-page";
+    signInOtherButton.className = "btn w-75 btn-page";
+    signOutButton.className = "btn w-75 btn-page";
+    var otherPanel = document.getElementById("idp_SignInToOtherRpPanel");
+    otherPanel.style.padding = "5px";
+    var dropDownlist = document.getElementById("idp_RelyingPartyDropDownList");
+    dropDownlist.className = "select-control";
+    var idp_SignInPanel = document.getElementById("idp_SignInPanel");
+    idp_SignInPanel.style.paddingTop = "15px";
+}
 
-        
-  <li class="li-footer__item font-sans text-xs text-color-text-solid-secondary flex flex-shrink-0 justify-start p-1 relative w-50% papabear:justify-center papabear:w-auto">
-        <a class="li-footer__item-link flex items-center font-sans text-xs font-bold text-color-text-solid-secondary hover:text-color-link-hover focus:text-color-link-focus" href="https://www.linkedin.com/legal/user-agreement?trk=homepage-basic_footer-user-agreement" data-tracking-control-name="homepage-basic_footer-user-agreement" data-tracking-will-navigate>
-          
-          User Agreement
-        
-        </a>
-  </li>
+//// add jquery script
 
-        
-  <li class="li-footer__item font-sans text-xs text-color-text-solid-secondary flex flex-shrink-0 justify-start p-1 relative w-50% papabear:justify-center papabear:w-auto">
-        <a class="li-footer__item-link flex items-center font-sans text-xs font-bold text-color-text-solid-secondary hover:text-color-link-hover focus:text-color-link-focus" href="https://www.linkedin.com/legal/privacy-policy?trk=homepage-basic_footer-privacy-policy" data-tracking-control-name="homepage-basic_footer-privacy-policy" data-tracking-will-navigate>
-          
-          Privacy Policy
-        
-        </a>
-  </li>
+//function uuidv4() {
+//    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+//        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+//        return v.toString(16);
+//    });
+//}
 
-<!---->        
-  <li class="li-footer__item font-sans text-xs text-color-text-solid-secondary flex flex-shrink-0 justify-start p-1 relative w-50% papabear:justify-center papabear:w-auto">
-        <a class="li-footer__item-link flex items-center font-sans text-xs font-bold text-color-text-solid-secondary hover:text-color-link-hover focus:text-color-link-focus" href="https://www.linkedin.com/legal/cookie-policy?trk=homepage-basic_footer-cookie-policy" data-tracking-control-name="homepage-basic_footer-cookie-policy" data-tracking-will-navigate>
-          
-          Cookie Policy
-        
-        </a>
-  </li>
+var fOnLoadJquery = function () {
+				   
 
-        
-  <li class="li-footer__item font-sans text-xs text-color-text-solid-secondary flex flex-shrink-0 justify-start p-1 relative w-50% papabear:justify-center papabear:w-auto">
-        <a class="li-footer__item-link flex items-center font-sans text-xs font-bold text-color-text-solid-secondary hover:text-color-link-hover focus:text-color-link-focus" href="https://www.linkedin.com/legal/copyright-policy?trk=homepage-basic_footer-copyright-policy" data-tracking-control-name="homepage-basic_footer-copyright-policy" data-tracking-will-navigate>
-          
-          Copyright Policy
-        
-        </a>
-  </li>
+    addScript('https://gas.mcd.com/adfs/portal/script/bootstrap.min.js', null);
+    addScript('https://gas.mcd.com/adfs/portal/script/janrain-utils.js?ver=' + jsVer, null);
+    addScript('https://gas.mcd.com/adfs/portal/script/janrain-init.js?ver=' + jsVer, fOnLoadJanrain);
+};
+var fOnLoadJanrain = function () {
+    addScript('https://gas.mcd.com/adfs/portal/script/api.js?ver=' + jsVer, fOnLoadAPI);
+		 
 
-        
-  <li class="li-footer__item font-sans text-xs text-color-text-solid-secondary flex flex-shrink-0 justify-start p-1 relative w-50% papabear:justify-center papabear:w-auto">
-        <a class="li-footer__item-link flex items-center font-sans text-xs font-bold text-color-text-solid-secondary hover:text-color-link-hover focus:text-color-link-focus" href="https://brand.linkedin.com/policies?trk=homepage-basic_footer-brand-policy" data-tracking-control-name="homepage-basic_footer-brand-policy" data-tracking-will-navigate>
-          
-          Brand Policy
-        
-        </a>
-  </li>
+    if (page == 3) {
+        addSpinner();
+    }
 
-          
-  <li class="li-footer__item font-sans text-xs text-color-text-solid-secondary flex flex-shrink-0 justify-start p-1 relative w-50% papabear:justify-center papabear:w-auto">
-        <a class="li-footer__item-link flex items-center font-sans text-xs font-bold text-color-text-solid-secondary hover:text-color-link-hover focus:text-color-link-focus" href="https://www.linkedin.com/psettings/guest-controls?trk=homepage-basic_footer-guest-controls" data-tracking-control-name="homepage-basic_footer-guest-controls" data-tracking-will-navigate>
-          
-            Guest Controls
-          
-        </a>
-  </li>
+    if (page == 4) {
+        $('#contentWrapper').prepend('<div id=\"header-content\" class=\"d-flex flex-row flex-wrap align-items-center\"><div id=\"logo\" class=\"d-flex justify-content-center align-items-center\"><img alt=\"McDonalds Logo\" src=\"/adfs/portal/images/logo.png\"></div></div>');
+    }
+}
+var fOnLoadAPI = function () {
 
-        
-  <li class="li-footer__item font-sans text-xs text-color-text-solid-secondary flex flex-shrink-0 justify-start p-1 relative w-50% papabear:justify-center papabear:w-auto">
-        <a class="li-footer__item-link flex items-center font-sans text-xs font-bold text-color-text-solid-secondary hover:text-color-link-hover focus:text-color-link-focus" href="https://www.linkedin.com/legal/professional-community-policies?trk=homepage-basic_footer-community-guide" data-tracking-control-name="homepage-basic_footer-community-guide" data-tracking-will-navigate>
-          
-          Community Guidelines
-        
-        </a>
-  </li>
+    addScript('https://gas.mcd.com/adfs/portal/script/utils.js?ver=' + jsVer, null);
+    addScript('https://gas.mcd.com/adfs/portal/script/login.js?ver=' + jsVer, null);
 
-        
-<!---->
-          
-          
-  <li class="li-footer__item font-sans text-xs text-color-text-solid-secondary flex flex-shrink-0 justify-start p-1 relative w-50% papabear:justify-center papabear:w-auto">
-        
-              
+    API.Page = page;
+    API.loginErrorText = lloginErrorText;
+    if (page > 0)
+        API.getCurrentPage();
+};
 
-    
-    
+var addSpinner = function () {
+    var fullPage = document.getElementById("fullPage");
+    var spinner = document.createElement("div");
+    spinner.id = "spinner";
+    fullPage.appendChild(spinner);
+};
 
-    
+var addScript = function (url, callback) {
+    var s = document.createElement("script");
+    s.type = "text/javascript";
+    s.src = url || null;
 
-    
 
-    <div class="collapsible-dropdown collapsible-dropdown--footer collapsible-dropdown--up flex items-center relative hyphens-auto language-selector z-2">
-<!---->
-        <ul class="collapsible-dropdown__list hidden container-raised absolute w-auto overflow-y-auto flex-col items-stretch z-[9999] bottom-[100%] top-auto" role="menu" tabindex="-1">
-          
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="العربية (Arabic)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-ar_AE" data-locale="ar_AE" role="menuitem" lang="ar_AE">
-                العربية (Arabic)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="বাংলা (Bangla)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-bn_IN" data-locale="bn_IN" role="menuitem" lang="bn_IN">
-                বাংলা (Bangla)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Čeština (Czech)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-cs_CZ" data-locale="cs_CZ" role="menuitem" lang="cs_CZ">
-                Čeština (Czech)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Dansk (Danish)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-da_DK" data-locale="da_DK" role="menuitem" lang="da_DK">
-                Dansk (Danish)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Deutsch (German)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-de_DE" data-locale="de_DE" role="menuitem" lang="de_DE">
-                Deutsch (German)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Ελληνικά (Greek)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-el_GR" data-locale="el_GR" role="menuitem" lang="el_GR">
-                Ελληνικά (Greek)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="English (English) selected" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link--selected" data-tracking-control-name="language-selector-en_US" data-locale="en_US" role="menuitem" lang="en_US">
-                <strong>English (English)</strong>
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Español (Spanish)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-es_ES" data-locale="es_ES" role="menuitem" lang="es_ES">
-                Español (Spanish)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="فارسی (Persian)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-fa_IR" data-locale="fa_IR" role="menuitem" lang="fa_IR">
-                فارسی (Persian)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Suomi (Finnish)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-fi_FI" data-locale="fi_FI" role="menuitem" lang="fi_FI">
-                Suomi (Finnish)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Français (French)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-fr_FR" data-locale="fr_FR" role="menuitem" lang="fr_FR">
-                Français (French)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="हिंदी (Hindi)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-hi_IN" data-locale="hi_IN" role="menuitem" lang="hi_IN">
-                हिंदी (Hindi)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Magyar (Hungarian)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-hu_HU" data-locale="hu_HU" role="menuitem" lang="hu_HU">
-                Magyar (Hungarian)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Bahasa Indonesia (Indonesian)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-in_ID" data-locale="in_ID" role="menuitem" lang="in_ID">
-                Bahasa Indonesia (Indonesian)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Italiano (Italian)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-it_IT" data-locale="it_IT" role="menuitem" lang="it_IT">
-                Italiano (Italian)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="עברית (Hebrew)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-iw_IL" data-locale="iw_IL" role="menuitem" lang="iw_IL">
-                עברית (Hebrew)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="日本語 (Japanese)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-ja_JP" data-locale="ja_JP" role="menuitem" lang="ja_JP">
-                日本語 (Japanese)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="한국어 (Korean)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-ko_KR" data-locale="ko_KR" role="menuitem" lang="ko_KR">
-                한국어 (Korean)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="मराठी (Marathi)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-mr_IN" data-locale="mr_IN" role="menuitem" lang="mr_IN">
-                मराठी (Marathi)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Bahasa Malaysia (Malay)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-ms_MY" data-locale="ms_MY" role="menuitem" lang="ms_MY">
-                Bahasa Malaysia (Malay)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Nederlands (Dutch)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-nl_NL" data-locale="nl_NL" role="menuitem" lang="nl_NL">
-                Nederlands (Dutch)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Norsk (Norwegian)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-no_NO" data-locale="no_NO" role="menuitem" lang="no_NO">
-                Norsk (Norwegian)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="ਪੰਜਾਬੀ (Punjabi)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-pa_IN" data-locale="pa_IN" role="menuitem" lang="pa_IN">
-                ਪੰਜਾਬੀ (Punjabi)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Polski (Polish)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-pl_PL" data-locale="pl_PL" role="menuitem" lang="pl_PL">
-                Polski (Polish)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Português (Portuguese)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-pt_BR" data-locale="pt_BR" role="menuitem" lang="pt_BR">
-                Português (Portuguese)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Română (Romanian)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-ro_RO" data-locale="ro_RO" role="menuitem" lang="ro_RO">
-                Română (Romanian)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Русский (Russian)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-ru_RU" data-locale="ru_RU" role="menuitem" lang="ru_RU">
-                Русский (Russian)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Svenska (Swedish)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-sv_SE" data-locale="sv_SE" role="menuitem" lang="sv_SE">
-                Svenska (Swedish)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="తెలుగు (Telugu)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-te_IN" data-locale="te_IN" role="menuitem" lang="te_IN">
-                తెలుగు (Telugu)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="ภาษาไทย (Thai)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-th_TH" data-locale="th_TH" role="menuitem" lang="th_TH">
-                ภาษาไทย (Thai)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Tagalog (Tagalog)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-tl_PH" data-locale="tl_PH" role="menuitem" lang="tl_PH">
-                Tagalog (Tagalog)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Türkçe (Turkish)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-tr_TR" data-locale="tr_TR" role="menuitem" lang="tr_TR">
-                Türkçe (Turkish)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Українська (Ukrainian)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-uk_UA" data-locale="uk_UA" role="menuitem" lang="uk_UA">
-                Українська (Ukrainian)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="Tiếng Việt (Vietnamese)" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-vi_VN" data-locale="vi_VN" role="menuitem" lang="vi_VN">
-                Tiếng Việt (Vietnamese)
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="简体中文 (Chinese (Simplified))" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-zh_CN" data-locale="zh_CN" role="menuitem" lang="zh_CN">
-                简体中文 (Chinese (Simplified))
-            </button>
-          </li>
-          <li class="language-selector__item" role="presentation">
-            <!-- Adding aria-label to both the li and the button because screen reader focus goes to button on desktop and li on mobile-->
-            <button aria-label="正體中文 (Chinese (Traditional))" class="font-sans text-xs link block py-[5px] px-2 w-full hover:cursor-pointer hover:bg-color-action hover:text-color-text-on-dark focus:bg-color-action focus:text-color-text-on-dark
-                language-selector__link !font-regular" data-tracking-control-name="language-selector-zh_TW" data-locale="zh_TW" role="menuitem" lang="zh_TW">
-                正體中文 (Chinese (Traditional))
-            </button>
-          </li>
-<!---->      
-        </ul>
+    if (s.onreadystatechange) {
+        s.onreadystatechange = callback || null;
 
-          
-        <button class="language-selector__button select-none relative pr-2 font-sans text-xs font-bold text-color-text-low-emphasis hover:text-color-link-hover hover:cursor-pointer focus:text-color-link-focus focus:outline-dotted focus:outline-1" aria-expanded="false" data-tracking-control-name="footer-lang-dropdown_trigger">
-          <span class="language-selector__label-text mr-0.5 break-words">
-            Language
-          </span>
-          <icon class="language-selector__label-chevron w-2 h-2 absolute top-0 right-0" data-delayed-url="https://static.licdn.com/aero-v1/sc/h/cyolgscd0imw2ldqppkrb84vo"></icon>
-        </button>
-      
-    </div>
-  
-  
-          
-  </li>
+    } else {
+        s.onload = callback || null;
+    }
 
-      </ul>
+    document.getElementsByTagName("head")[0].appendChild(s);
+};
 
-<!---->    </footer>
-  
-          <script src="https://static.licdn.com/aero-v1/sc/h/bomhiirxve6rcf6g3x4bf32cn" async defer></script>
-          <script data-delayed-url="https://static.licdn.com/aero-v1/sc/h/51t74mlo1ty7vakn3a80a9jcp" data-module-id="apfc-lib"></script>
-          <code id="apfcLix" style="display: none"><!--true--></code>
-<!---->      
+var addCssScript = function (url, callback) {
+    var s = document.createElement("link");
+    s.type = "text/css";
+    s.rel = "stylesheet";
+    s.href = url || null;
+    s.onload = callback || null;
+    document.getElementsByTagName("head")[0].appendChild(s);
+};
 
-            <script src="https://static.licdn.com/aero-v1/sc/h/cnxivhx5op0cwgxozgzlpf16m" async></script>
-<!---->          
-          
-<!----><!---->  
-      </body>
-    </html>
-  
-  
+function getParameterByName(name) {
+    var url = window.location.href;
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+
+addScript('https://gas.mcd.com/adfs/portal/script/jquery-3.6.0.min.js', fOnLoadJquery);
+addScript('https://gas.mcd.com/adfs/portal/script/common.js?ver=' + jsVer, null);
+
+addCssScript('https://gas.mcd.com/adfs/portal/css/bootstrap.min.css', null);
+addCssScript('https://gas.mcd.com/adfs/portal/css/content_background.css', null);
+addCssScript('https://gas.mcd.com/adfs/portal/css/general.css?ver=' + cssVer, null);
+addCssScript('https://gas.mcd.com/adfs/portal/css/modal.css', null);
+addCssScript('https://gas.mcd.com/adfs/portal/css/fonts-css.css', null);
+addCssScript('https://gas.mcd.com/adfs/portal/css/site.css', null);
+//addCssScript('https://gas.mcd.com/adfs/portal/css/fontawesome.css', null);
+
+////
+//// Telemetry Manager is the App Insights telemetry management object
+//// Callers MUST call 'Initialize' before using the 'ProducePageDetectionTelemetry' method
+////
+//var TelemetryManager = {
+
+//    /*
+//     * Initialize the app state for the current page 
+//     */
+//    Initialize: function () {
+//        var _self = this;
+
+//        // Collect some page details for later 
+//        var NOT_SET_CONST = 'NOTSET';
+//        _self.currentUri = window.location.href.split('?')[0];
+//        _self.mswtrealm = _self.getQueryString("wtrealm") || NOT_SET_CONST;
+//        _self.decodedwtrealm = decodeURIComponent(_self.mswtrealm) || NOT_SET_CONST;
+//        _self.requestID = _self.getQueryString("client-request-id") || NOT_SET_CONST;
+//        _self.wfresh = _self.getQueryString("wfresh") || NOT_SET_CONST;
+//        _self.wauth = _self.getQueryString("wauth") || NOT_SET_CONST;
+//        _self.debugging = _self.getQueryString("debug") || NOT_SET_CONST;
+//        _self.wauth = decodeURIComponent(_self.wauth);
+//        _self.Username = NOT_SET_CONST;
+
+//        _self.startedPfaWaiting = false;
+//        _self.pfaTimestamp = null;
+//        _self.pfaTimestampOldBrowser = null;
+//        _self.startedAuthSelectionWaiting = false;
+//        _self.authSelectionTimestamp = null;
+//        _self.authSelectionTimestampOldBrowser = null;
+//        _self.authSelectionLinkClicked = null;
+//        _self.authSelectionMethod = null;
+//        _self.startedFormsPage = false;
+
+//        // Create App Insights object with settings 
+//        if (!window.appInsights) {
+//            if (console && _self.debugging) console.log("TelemetryManager: Generating a new App Insights object");
+//            var appInsights = _self.GenerateAppInsightsObject.call();
+
+//            // Set App Insights object against the current window 
+//            window.appInsights = appInsights;
+//            if (console && _self.debugging) console.log("TelemetryManager: Set new App Insights object against the current window");
+//        }
+
+//        //
+//        // Add unload callback to window, so we can capture telemetry 
+//        //
+//        if (window.addEventListener) {
+//            window.addEventListener("unload", function () { _self.LeavingCurrentPageCallback(_self); }, false);  // Modern browsers
+//        } else if (window.attachEvent) {
+//            window.attachEvent('onunload', function () { _self.LeavingCurrentPageCallback(_self); });            // Old IE
+//        }
+
+//        window.appInsights.queue.push(() => {
+//            appInsights.context.addTelemetryInitializer((envelope) => {
+//                envelope.tags["ai.cloud.role"] = "ADFS Front";
+//                envelope.tags["ai.cloud.roleInstance"] = "GAS_DEV_ADFS_2";
+//            });
+//        });
+
+//        if (console && _self.debugging) console.log("Exit: TelemetryManager.Initialize");
+//    },
+
+//    /*
+//     * Generate an App Insights object to use when
+//     *  sending telemetry. 
+//     */
+//    GenerateAppInsightsObject: function () {
+//        return function (config) {
+//            function r(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } } var t = { config: config }, u = document, e = window, o = "script", s = u.createElement(o), i, f; for (s.src = config.url || "//az416426.vo.msecnd.net/scripts/a/ai.0.js", u.getElementsByTagName(o)[0].parentNode.appendChild(s), t.cookie = u.cookie, t.queue = [], i = ["Event", "Exception", "Metric", "PageView", "Trace"]; i.length;) r("track" + i.pop()); return r("setAuthenticatedUserContext"), r("clearAuthenticatedUserContext"), config.disableExceptionTracking || (i = "onerror", r("_" + i), f = e[i], e[i] = function (config, r, u, e, o) { var s = f && f(config, r, u, e, o); return s !== !0 && t["_" + i](config, r, u, e, o), s }), t
+//        }({
+//            samplingPercentage: 100,
+//            instrumentationKey: "d18fb15a-6e6d-4518-b287-da2f2812f508"
+//        });
+//    },
+
+//    /*
+//     * Helper function to get a querystring parameter 
+//     */
+//    getQueryString: function (qsName) {
+//        qsName = qsName.replace(/[\[\]]/g, "\\$&");
+//        var regex = new RegExp("[?&]" + qsName + "(=([^&#]*)|&|#|$)"),
+//            results = regex.exec(location.href);
+//        if (!results) return "";
+//        if (!results[2]) return "";
+//        return decodeURIComponent(results[2].replace(/\+/g, " "));
+//    },
+
+//    /*
+//     *  Produces all telemetry for the following pages: 
+//     *      Forms Page 
+//     *      AuthSelection Page 
+//     *      Home Realm Discovery Page 
+//     *      Phone Factor Authentication Page 
+//     *      Phone Factor Error Page 
+//     *      ADFS Error Page 
+//     *      Phone Factor Authentication Options Page 
+//     */
+//    ProducePageDetectionTelemetry: function () {
+
+//        var _self = this;
+
+//        if (console && _self.debugging) console.log("Enter: TelemetryManager.ProducePageDetectionTelemetry");
+
+//        //
+//        // Generic Page view tracking 
+//        //
+//        window.appInsights.trackPageView("Generic");
+
+//        //
+//        // Home Realm Discovery Page
+//        //
+//        var hrd = document.getElementById('hrd');
+//        if (hrd) {
+//            window.appInsights.trackPageView("HomeRealmDiscovery");
+//            if (console && _self.debugging) console.log("ProducePageDetectionTelemetry: Found HRD Page");
+//            return;
+//        }
+
+//        //
+//        // Forms Page (before creds are entered)
+//        //  NOTE: This only works for pages presented in English 
+//        //
+//        var pageloginForm = document.getElementById('loginForm');
+//        if (!hrd && pageloginForm && document.title == 'Sign In') {
+//            window.appInsights.trackPageView("FormsPage");
+//            window.appInsights.trackEvent("FormsPageStart",
+//                { CorrelationID: _self.requestID, CurrentUri: _self.currentUri, CurrentRealm: _self.mswtrealm, wauth: _self.wauth, wfresh: _self.wfresh, wtrealm: _self.decodedwtrealm }
+//            );
+//            _self.startedFormsPage = true;
+//            if (console && _self.debugging) console.log("ProducePageDetectionTelemetry: Found Forms Page");
+//            return;
+//        }
+
+//        //
+//        // Error Page
+//        //
+//        var ierrorText = document.getElementById("errorText");
+//        if (ierrorText) {
+//            var ierrorCurrent = ierrorText.innerHTML;
+//            if (ierrorCurrent.length > 0) {
+//                var pageTitle = document.title;
+
+//                //
+//                // Try to gather more error information from the page 
+//                //
+//                var erruserAccount = _self.GetUserNameFromAuthArea();
+//                var erractivityId = (document.getElementById('activityId') || { innerText: '' }).innerText;
+//                var errcontextId = (document.getElementById('contextId') || { innerText: '' }).innerText;
+//                var errtimestamp = (document.getElementById('timestamp') || { innerText: '' }).innerText;
+
+//                if (erractivityId || errcontextId || errtimestamp) {
+//                    window.appInsights.trackPageView("ErrorDetailedPage");
+//                    window.appInsights.trackEvent("ErrorDetailedPageStart",
+//                        { CorrelationID: _self.requestID, CurrentUri: _self.currentUri, CurrentRealm: _self.mswtrealm, wtrealm: _self.decodedwtrealm, wfresh: _self.wfresh, wauth: _self.wauth, PageTitle: pageTitle, Username: erruserAccount, ActivityID: erractivityId, ContextId: errcontextId, ErrorTimestamp: errtimestamp }
+//                    );
+//                    if (console && _self.debugging) console.log("ProducePageDetectionTelemetry: Found Detailed Error Page");
+//                }
+//                return;
+//            }
+//        }
+
+//        //
+//        // AuthSelection Page
+//        //
+//        var authOptions = document.getElementById('authOptions')
+//        var progress = document.getElementById('Progress')
+//        if (authOptions && !progress) {
+
+//            var foundUsername = _self.GetUserNameFromAuthArea();
+//            _self.Username = foundUsername;
+
+//            window.appInsights.trackPageView("AuthSelectionPage");
+//            window.appInsights.trackEvent("AuthSelectionPageStart",
+//                { CorrelationID: _self.requestID, CurrentUri: _self.currentUri, CurrentRealm: _self.mswtrealm, wtrealm: _self.decodedwtrealm, wfresh: _self.wfresh, wauth: _self.wauth, Username: _self.Username }
+//            );
+//            if (console && _self.debugging) console.log("ProducePageDetectionTelemetry: Found Auth Selection Page");
+
+//            //
+//            // Add click callbacks to the auth selection options
+//            //  NOTE: If you have other options you wish to track, add them here
+//            //
+//            var certOption = document.getElementById('CertificateAuthentication');
+//            if (certOption) {
+//                certOption.addEventListener("click", function () { _self.AuthSelectionPageSubmitCallback("cert", "manual", _self); }, false);
+//            }
+//            var azureOption = document.getElementById('WindowsAzureMultiFactorAuthentication');
+//            if (azureOption) {
+//                azureOption.addEventListener("click", function () { _self.AuthSelectionPageSubmitCallback("phonefactor", "manual", _self); }, false);
+//            }
+
+//            return;
+//        }
+
+//        //
+//        // Phone Factor Waiting Page 
+//        //
+//        var workArea = document.getElementById('workArea');
+//        var authArea = document.getElementById('authArea');
+//        var progressDiv = document.getElementById('Progress');
+//        var authMethod = document.getElementById('authMethod');
+//        var errorDiv = document.getElementById('errorDiv');
+//        if (workArea && authArea && progressDiv && authMethod && !errorDiv) {
+
+//            var phonefactorUserID = _self.GetUserNameFromAuthArea();
+//            var authchildren = authArea.childNodes;
+//            for (var i = 0; i < authchildren.length; i++) {
+//                if (authchildren[i].className === 'fieldMargin bigText') {
+//                    window.appInsights.trackPageView("PhoneFactorWaitingPage");
+//                    window.appInsights.trackEvent("PhoneFactorWaitingStart",
+//                        { CorrelationID: _self.requestID, CurrentUri: _self.currentUri, CurrentRealm: _self.mswtrealm, wtrealm: _self.decodedwtrealm, wfresh: _self.wfresh, wauth: _self.wauth, Username: phonefactorUserID }
+//                    );
+//                    if (console && _self.debugging) console.log("ProducePageDetectionTelemetry: Found PFA Waiting Page");
+
+//                    // Once we detect the pfa page, add a timer to collect the PFA latency 
+//                    _self.startedPfaWaiting = true;
+//                    _self.Username = phonefactorUserID;
+
+//                    if (performance && performance.now()) {
+//                        _self.pfaTimestamp = performance.now();
+//                    }
+
+//                    if (Date && Date.now()) {
+//                        _self.pfaTimestampOldBrowser = Date.now();
+//                    }
+
+//                    return;
+//                }
+//            }
+//        }
+
+//        if (console && _self.debugging) console.log("Exit: TelemetryManager.ProducePageDetectionTelemetry");
+//    },
+
+//    /*
+//     * Collect the username from the auth area message 
+//     *  NOTE: This method only works for pages presented in English 
+//     */
+//    GetUserNameFromAuthArea: function () {
+//        var authchildren = document.getElementById('authArea').childNodes;
+//        for (var i = 0; i < authchildren.length; i++) {
+//            if (authchildren[i].className === 'fieldMargin bigText') {
+//                var tempuserAccount = authchildren[i].innerText;
+//                return tempuserAccount.replace("Welcome ", "");
+//            }
+//        }
+//    },
+
+//    /*
+//     * Callback function when the AuthSelection page is being submitted after an 
+//     *  auth option was chosen.
+//     */
+//    AuthSelectionPageSubmitCallback: function (linkClicked, selectionMethod, _self) {
+//        if (console && _self.debugging) console.log("Enter: TelemetryManager.AuthSelectionPageSubmitCallback");
+
+//        // Collect telemetry
+//        window.appInsights.trackEvent("AuthSelectionPicked",
+//            { CorrelationID: _self.requestID, CurrentUri: _self.currentUri, CurrentRealm: _self.mswtrealm, wauth: _self.wauth, wfresh: _self.wfresh, Type: linkClicked, SelectionMethod: selectionMethod, wtrealm: _self.decodedwtrealm, Username: _self.Username }
+//        );
+
+//        if (console && _self.debugging) console.log("AuthSelectionPageSubmitCallback: Link Clicked: " + linkClicked);
+
+//        // Start the auth selection timer to time from page submit to page unload 
+//        _self.startedAuthSelectionWaiting = true;
+//        _self.authSelectionLinkClicked = linkClicked;
+//        _self.authSelectionMethod = selectionMethod;
+
+//        if (performance && performance.now()) {
+//            _self.authSelectionTimestamp = performance.now();
+//        }
+
+//        if (Date && Date.now()) {
+//            _self.authSelectionTimestampOldBrowser = Date.now();
+//        }
+
+//        if (console && _self.debugging) console.log("Exit: TelemetryManager.AuthSelectionPageSubmitCallback");
+//    },
+
+//    /*
+//     * Callback function when any page is being left
+//     *  NOTE: Due to browser unload calls, there is no guarantee that the 
+//     *   processing in this method will complete. Some of the XHR requests made for 
+//     *   trackEvent calls may not succeed. This telemetry is a best-effort collection
+//     */
+//    LeavingCurrentPageCallback: function (_self) {
+
+//        // Grab the window appInsights object for local use 
+//        var localAppInsights = window.appInsights;
+//        var flushMePlease = false;
+
+//        if (_self.startedFormsPage) {
+//            _self.Username = document.getElementById(Login.userNameInput).value;
+//            localAppInsights.trackEvent("FormsPageEnd",
+//                { CorrelationID: _self.requestID, CurrentUri: _self.currentUri, CurrentRealm: _self.mswtrealm, wtrealm: _self.decodedwtrealm, wfresh: _self.wfresh, wauth: _self.wauth, Username: _self.Username }
+//            );
+//            _self.startedFormsPage = false;
+//            flushMePlease = true;
+//        }
+
+//        var pfaTime = null;
+//        if (_self.pfaTimestamp) {
+//            pfaTime = (performance.now() - _self.pfaTimestamp) / 1000.0;
+//        }
+
+//        var pfaTimeOldBrowser = null;
+//        if (_self.pfaTimestampOldBrowser) {
+//            pfaTimeOldBrowser = (Date.now() - _self.pfaTimestampOldBrowser) / 1000.0;
+//        }
+
+//        if (pfaTime) {
+//            localAppInsights.trackEvent("PhoneFactorLatency",
+//                { CorrelationID: _self.requestID, CurrentUri: _self.currentUri, CurrentRealm: _self.mswtrealm, wtrealm: _self.decodedwtrealm, wfresh: _self.wfresh, wauth: _self.wauth, Username: _self.Username },
+//                { Latency: pfaTime }
+//            );
+//            flushMePlease = true;
+//        } else if (pfaTimeOldBrowser) {
+//            localAppInsights.trackEvent("PhoneFactorLatency",
+//                { CorrelationID: _self.requestID, CurrentUri: _self.currentUri, CurrentRealm: _self.mswtrealm, wtrealm: _self.decodedwtrealm, wfresh: _self.wfresh, wauth: _self.wauth, Username: _self.Username },
+//                { OldBrowserLatency: pfaTimeOldBrowser }
+//            );
+//            flushMePlease = true;
+//        }
+
+//        if (_self.startedPfaWaiting) {
+
+//            localAppInsights.trackEvent("PhoneFactorWaitingEnd",
+//                { CorrelationID: _self.requestID, CurrentUri: _self.currentUri, CurrentRealm: _self.mswtrealm, wtrealm: _self.decodedwtrealm, wfresh: _self.wfresh, wauth: _self.wauth, Username: _self.Username }
+//            );
+//            _self.startedPfaWaiting = false;
+//            flushMePlease = true;
+//        }
+
+//        if (_self.startedAuthSelectionWaiting) {
+//            localAppInsights.trackEvent("AuthSelectionPageEnd",
+//                { CorrelationID: _self.requestID, CurrentUri: _self.currentUri, CurrentRealm: _self.mswtrealm, wtrealm: _self.decodedwtrealm, wfresh: _self.wfresh, wauth: _self.wauth, Username: _self.Username, Type: _self.authSelectionLinkClicked, SelectionMethod: _self.authSelectionMethod }
+//            );
+//            _self.startedAuthSelectionWaiting = false;
+//            flushMePlease = true;
+//        }
+
+//        var authSelectionTime = null;
+//        if (_self.authSelectionTimestamp) {
+//            authSelectionTime = (performance.now() - _self.authSelectionTimestamp) / 1000.0;
+//        }
+
+//        var authSelectionTimeOldBrowser = null;
+//        if (_self.authSelectionTimestampOldBrowser) {
+//            authSelectionTimeOldBrowser = (Date.now() - _self.authSelectionTimestampOldBrowser) / 1000.0;
+//        }
+
+//        if (authSelectionTime) {
+//            localAppInsights.trackEvent("AuthSelectionLatency",
+//                { CorrelationID: _self.requestID, Username: _self.Username, wauth: _self.wauth, wfresh: _self.wfresh, wtrealm: _self.decodedwtrealm, Type: _self.authSelectionLinkClicked, SelectionMethod: _self.authSelectionMethod },
+//                { Latency: authSelectionTime }
+//            );
+//            flushMePlease = true;
+//        } else if (authSelectionTimeOldBrowser) {
+//            localAppInsights.trackEvent("AuthSelectionLatency",
+//                { CorrelationID: _self.requestID, Username: _self.Username, wauth: _self.wauth, wfresh: _self.wfresh, wtrealm: _self.decodedwtrealm, Type: _self.authSelectionLinkClicked, SelectionMethod: _self.authSelectionMethod },
+//                { OldBrowserLatency: authSelectionTimeOldBrowser }
+//            );
+//            flushMePlease = true;
+//        }
+
+//        if (flushMePlease) {
+//            if (localAppInsights) {
+//                if (localAppInsights.flush) {
+//                    localAppInsights.flush();
+//                }
+//            }
+//        }
+//    },
+//};
+
+//// Produce telemetry 
+//if (console) console.log("TelemetryManager: Start trying to produce telemetry");
+//var pageTelemetryManager = TelemetryManager;
+//pageTelemetryManager.Initialize();
+//pageTelemetryManager.ProducePageDetectionTelemetry();
+//if (console) console.log("TelemetryManager: End trying to produce telemetry");
+//]]>
+</script>
+
+
+    </body>
+</html> 
+
