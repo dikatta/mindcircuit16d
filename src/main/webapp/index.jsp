@@ -1,2 +1,2 @@
 
-This is Divya's Github
+This is Divya's Github account
